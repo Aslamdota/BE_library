@@ -76,6 +76,9 @@ Route::get('/returns/data_history', [PeminjamanController::class, 'getLoansForRe
 
 Route::post('/loans/{loan}/return', [PeminjamanController::class, 'returnBook'])->name('loans.return');
 
+// book missing
+Route::get('/getBookMissing', [PeminjamanController::class, 'getBookMissing'])->name('get.book.missing');
+
 // Fine settings routes
 Route::get('/fine-settings', [FineMasterController::class, 'getFineSettings'])->name('fine.get');
 Route::post('/fine-settings', [FineMasterController::class, 'updateFineSettings'])->name('fine.update');

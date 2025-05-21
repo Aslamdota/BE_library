@@ -9,11 +9,6 @@
 @endpush
 @section('content')
 
-<style>
-    .modal-center {
-        margin-right: 20%;
-    }
-</style>
 
 <div class="page-wrapper">
     <div class="page-content">

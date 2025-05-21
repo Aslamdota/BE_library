@@ -11,10 +11,10 @@ class Book_missing extends Model
 
     public function book()
     {
-        return $this->belongsTo(Book::class, 'book_id');
+        return $this->belongsTo(Book::class, 'isbn', 'isbn');
     }
 
-    // Relasi ke model Member
+    
     public function member()
     {
         return $this->belongsTo(Member::class, 'member_id');

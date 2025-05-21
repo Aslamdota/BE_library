@@ -45,6 +45,12 @@
                             <i class="bx bx-history me-1"></i> Riwayat
                         </a>
                     </li>
+
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" data-bs-toggle="tab" href="#bookMissing" role="tab" aria-selected="false">
+                            <i class="bx bx-history me-1"></i> Buku Hilang
+                        </a>
+                    </li>
                 </ul>
                 
                 <div class="tab-content">
@@ -131,6 +137,26 @@
                                         <th width="10%">Denda</th>
                                         <th width="10%">Status</th>
                                         <th width="10%">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Data will be loaded via AJAX -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="bookMissing" role="tabpanel">
+                        <div class="table-responsive">
+                            <table id="bookMissingTable" class="table table-return table-hover" style="width:100%">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th width="5%">No</th>
+                                        <th width="10%">ISBN</th>
+                                        <th width="10%">Title</th>
+                                        <th>Member</th>
+                                        <th>Tanggal Hilang</th>
+                                        <th width="10%">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -659,6 +685,7 @@ $(document).ready(function() {
         });
     }
 
+
     // Load fine settings
     function loadFineSettings() {
         $.ajax({
@@ -1089,4 +1116,23 @@ function showMemberDetail(memberId) {
     });
 }
 </script>
+
+<script>
+$(document).ready(function() {
+    $('#bookMissingTable').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: '{{ route("get.book.missing") }}', // sesuaikan dengan nama route kamu
+        columns: [
+            { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+            { data: 'isbn', name: 'isbn',orderable: false, searchable: false },
+            { data: 'title', name: 'title' },
+            { data: 'member_id', name: 'member_id' },
+            { data: 'date_of_los', name: 'date_of_los' },
+            { data: 'status', name: 'status', orderable: false, searchable: false },
+        ]
+    });
+});
+</script>
+
 @endpush

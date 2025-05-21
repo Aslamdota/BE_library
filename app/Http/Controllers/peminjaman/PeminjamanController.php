@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Finemaster;
 use Carbon\Carbon;
 use App\Models\Book;
+use App\Models\Book_missing;
+
 class PeminjamanController extends Controller
 {
     public function viewPeminjaman(){
@@ -281,7 +283,7 @@ class PeminjamanController extends Controller
             ->addColumn('action', function($loan) {
                 $books = Book::whereId($loan->book_id)->first();
 
-                $missing_book = Missing_books::where('member_id', $loan->member_id)
+                $missing_book = Book_missing::where('member_id', $loan->member_id)
                 ->where('isbn', $books->isbn)
                 ->whereMonth('date_of_los', now()->month)
                 ->whereYear('date_of_los', now()->year)
@@ -296,6 +298,32 @@ class PeminjamanController extends Controller
             })
             ->rawColumns(['action'])
             ->toJson();
+    }
+
+    public function getBookMissing(){
+        if (request()->ajax()) {
+        $bookMissing = Book_missing::with(['member', 'book'])->latest()->get();
+
+        return DataTables::of($bookMissing)
+            ->addIndexColumn()
+            ->addColumn('isbn', function ($row) {
+                return '<span class="badge bg-gradient-quepal text-white shadow-sm w-10">'.$row->isbn.'</span>';
+            })
+            ->addColumn('title', function ($row) {
+                return $row->book->title ?? '-';
+            })
+            ->addColumn('member_id', function ($row) {
+                return $row->member->name ?? '-'; // ganti 'name' sesuai kolom nama member
+            })
+            ->addColumn('date_of_los', function ($row) {
+                return \Carbon\Carbon::parse($row->date_of_los)->translatedFormat('d M Y'); // ganti sesuai field
+            })
+            ->addColumn('status', function ($row) {
+                return '<span class="badge bg-gradient-blooker text-white shadow-sm w-10">'.$row->status.'</span>'; // sesuaikan dengan kebutuhan
+            })
+            ->rawColumns(['status', 'isbn'])
+            ->make(true);
+    }
     }
 
     
