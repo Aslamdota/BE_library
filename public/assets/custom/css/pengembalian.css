@@ -1,0 +1,185 @@
+:root {
+        --primary-color: #4361ee;
+        --secondary-color: #3f37c9;
+        --success-color: #4cc9f0;
+        --danger-color: #f72585;
+        --warning-color: #f8961e;
+        --info-color: #4895ef;
+        --light-color: #f8f9fa;
+        --dark-color: #212529;
+    }
+    
+    /* Badge Styles */
+    .badge-pending { background-color: #6c757d; color: white; }
+    .badge-borrowed { background-color: var(--primary-color); color: white; }
+    .badge-returned { background-color: var(--success-color); color: white; }
+    .badge-rejected { background-color: var(--danger-color); color: white; }
+    .badge-overdue { background-color: var(--warning-color); color: white; }
+    
+    /* Card Styles */
+    .card-return {
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        border: none;
+        transition: transform 0.3s ease;
+    }
+    
+    .card-return:hover {
+        transform: translateY(-5px);
+    }
+    
+    .card-header-return {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        border-radius: 15px 15px 0 0 !important;
+        padding: 1.5rem;
+    }
+    
+    /* Button Styles */
+    .btn-return {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-return:hover {
+        background-color: var(--secondary-color);
+        border-color: var(--secondary-color);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(67, 97, 238, 0.2);
+    }
+    
+    .btn-outline-return {
+        color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+    
+    .btn-outline-return:hover {
+        background-color: var(--primary-color);
+        color: white;
+    }
+    
+    /* Modal Styles */
+    .modal-header-return {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        border-bottom: none;
+    }
+    
+    /* Table Styles */
+    .table-return th {
+        background-color: #f8f9fa;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+    }
+    
+    .table-return td {
+        vertical-align: middle;
+    }
+    
+    .table-return tr:hover td {
+        background-color: rgba(67, 97, 238, 0.05);
+    }
+    
+    /* Status Badge */
+    .status-badge {
+        padding: 0.35em 0.65em;
+        font-size: 0.75em;
+        font-weight: 600;
+        border-radius: 50rem;
+        text-transform: capitalize;
+    }
+    
+    /* Fine Amount */
+    .fine-amount {
+        font-weight: 600;
+        color: var(--danger-color);
+    }
+    
+    /* General Styles */
+    .cursor-pointer { cursor: pointer; }
+    .text-ellipsis { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    
+    /* Tab Styles */
+    .nav-tabs .nav-link {
+        border: none;
+        color: var(--dark-color);
+        font-weight: 500;
+        padding: 0.75rem 1.5rem;
+    }
+    
+    .nav-tabs .nav-link.active {
+        color: var(--primary-color);
+        border-bottom: 3px solid var(--primary-color);
+        background-color: transparent;
+    }
+    
+    .nav-tabs .nav-link:hover:not(.active) {
+        color: var(--primary-color);
+    }
+    
+    /* Animation for buttons */
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+    
+    .btn-pulse:hover {
+        animation: pulse 1.5s infinite;
+    }
+    
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: var(--primary-color);
+        border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--secondary-color);
+    }
+    
+    /* Loading Spinner */
+    .spinner-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 200px;
+    }
+    
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 2rem;
+    }
+    
+    .empty-state i {
+        font-size: 4rem;
+        color: #dee2e6;
+        margin-bottom: 1rem;
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .card-header-return {
+            padding: 1rem;
+        }
+        
+        .nav-tabs .nav-link {
+            padding: 0.5rem 1rem;
+        }
+    }
