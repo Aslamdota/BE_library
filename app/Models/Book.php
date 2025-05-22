@@ -26,4 +26,9 @@ class Book extends Model
         return $this->hasMany(Loan::class, 'book_id');
     }
 
+    public function getCoverUrlAttribute()
+    {
+        return asset('storage/books/' . $this->cover_image); // asumsi field 'photo' menyimpan nama file
+    }
+
 }

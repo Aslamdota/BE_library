@@ -22,8 +22,9 @@ class BookController extends Controller
     {
         $books = Book::with('category')->paginate(10);
         $books->getCollection()->transform(function ($book) {
-            $book->cover_image = $book->cover_image 
-                ? asset('storage/covers/' . $book->cover_image) 
+            $book->cover = $book->cover_image;
+            $book->cover_url = $book->cover_image
+                ? url('storage/books/' . ltrim($book->cover_image, '/'))
                 : null;
             return $book;
         });
@@ -70,11 +71,16 @@ class BookController extends Controller
         if ($request->hasFile('cover_image')) {
             $image = $request->file('cover_image');
             $filename = time() . '.' . $image->getClientOriginalExtension();
-            $path = $image->storeAs('public/covers', $filename);
+            $image->storeAs('public/books', $filename);
             $book->cover_image = $filename;
         }
 
         $book->save();
+
+        $book->cover = $book->cover_image;
+        $book->cover_url = $book->cover_image
+            ? url('storage/books/' . ltrim($book->cover_image, '/'))
+            : null;
 
         return response()->json([
             'status' => 'success',
@@ -89,6 +95,10 @@ class BookController extends Controller
     public function show(Book $book)
     {
         $book->load('category');
+        $book->cover = $book->cover_image;
+        $book->cover_url = $book->cover_image
+            ? url('storage/books/' . ltrim($book->cover_image, '/'))
+            : null;
         return response()->json([
             'status' => 'success',
             'data' => $book
@@ -131,15 +141,20 @@ class BookController extends Controller
         if ($request->hasFile('cover_image')) {
             // Delete old image if exists
             if ($book->cover_image) {
-                Storage::delete('public/covers/' . $book->cover_image);
+                Storage::delete('public/books/' . $book->cover_image);
             }
             $image = $request->file('cover_image');
             $filename = time() . '.' . $image->getClientOriginalExtension();
-            $path = $image->storeAs('public/covers', $filename);
+            $image->storeAs('public/books', $filename);
             $book->cover_image = $filename;
         }
 
         $book->save();
+
+        $book->cover = $book->cover_image;
+        $book->cover_url = $book->cover_image
+            ? url('storage/books/' . ltrim($book->cover_image, '/'))
+            : null;
 
         return response()->json([
             'status' => 'success',
@@ -155,9 +170,9 @@ class BookController extends Controller
     {
         // Delete cover image if exists
         if ($book->cover_image) {
-            Storage::delete('public/covers/' . $book->cover_image);
+            Storage::delete('public/books/' . $book->cover_image);
         }
-        
+
         $book->delete();
 
         return response()->json([
@@ -172,13 +187,21 @@ class BookController extends Controller
     public function search(Request $request)
     {
         $query = $request->input('query');
-        
+
         $books = Book::where('title', 'like', "%{$query}%")
                     ->orWhere('author', 'like', "%{$query}%")
                     ->orWhere('isbn', 'like', "%{$query}%")
                     ->with('category')
                     ->paginate(10);
-        
+
+        $books->getCollection()->transform(function ($book) {
+            $book->cover = $book->cover_image;
+            $book->cover_url = $book->cover_image
+                ? url('storage/books/' . ltrim($book->cover_image, '/'))
+                : null;
+            return $book;
+        });
+
         return response()->json([
             'status' => 'success',
             'data' => $books
@@ -193,28 +216,45 @@ class BookController extends Controller
         $books = Book::where('category_id', $categoryId)
                     ->with('category')
                     ->paginate(10);
-        
+
+        $books->getCollection()->transform(function ($book) {
+            $book->cover = $book->cover_image;
+            $book->cover_url = $book->cover_image
+                ? url('storage/books/' . ltrim($book->cover_image, '/'))
+                : null;
+            return $book;
+        });
+
         return response()->json([
             'status' => 'success',
             'data' => $books
         ]);
     }
 
-    public function getRecomendation($memberId){
+    public function getRecomendation($memberId)
+    {
         $favorit = Borrowing::where('member_id', $memberId)
-                        ->join('books', 'borrowings.book_id', '=', 'books.id')
-                        ->join('categories', 'books.category_id', '=', 'categories.id')
-                        ->select('categories.id')
-                        ->groupBy('categories.id')
-                        ->orderByRaw('COUNT(categories.id) DESC')
-                        ->limit(3)
-                        ->pluck('categories.id');
+            ->join('books', 'borrowings.book_id', '=', 'books.id')
+            ->join('categories', 'books.category_id', '=', 'categories.id')
+            ->select('categories.id')
+            ->groupBy('categories.id')
+            ->orderByRaw('COUNT(categories.id) DESC')
+            ->limit(3)
+            ->pluck('categories.id');
 
         $recommendedBooks = Book::whereIn('category_id', $favorit)
-                        ->whereNotIn('id', Borrowing::where('member_id', $memberId)->pluck('book_id'))
-                        ->orderBy('title', 'asc')
-                        ->limit(5)
-                        ->get();
+            ->whereNotIn('id', Borrowing::where('member_id', $memberId)->pluck('book_id'))
+            ->orderBy('title', 'asc')
+            ->limit(5)
+            ->get();
+
+        $recommendedBooks->transform(function ($book) {
+            $book->cover = $book->cover_image;
+            $book->cover_url = $book->cover_image
+                ? url('storage/books/' . ltrim($book->cover_image, '/'))
+                : null;
+            return $book;
+        });
 
         return response()->json([
             'status' => 'success',
@@ -222,9 +262,18 @@ class BookController extends Controller
         ]);
     }
 
-    public function bestSeller(){
+    public function bestSeller()
+    {
         $bestSeller = Book::withCount('borrowings')
-                    ->orderBy('borrowings_count', 'asc')->limit(5)->get();
+            ->orderBy('borrowings_count', 'desc')->limit(5)->get();
+
+        $bestSeller->transform(function ($book) {
+            $book->cover = $book->cover_image;
+            $book->cover_url = $book->cover_image
+                ? url('storage/books/' . ltrim($book->cover_image, '/'))
+                : null;
+            return $book;
+        });
 
         return response()->json([
             'status' => 'success',
@@ -234,10 +283,20 @@ class BookController extends Controller
 
     public function latestBooks()
     {
-        // Ambil 4 buku terbaru berdasarkan created_at
         $books = Book::orderBy('created_at', 'desc')->take(4)->get();
 
-        return response()->json($books);
+        $books->transform(function ($book) {
+            $book->cover = $book->cover_image;
+            $book->cover_url = $book->cover_image
+                ? url('storage/books/' . ltrim($book->cover_image, '/'))
+                : null;
+            return $book;
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $books
+        ]);
     }
-    
+
 }
