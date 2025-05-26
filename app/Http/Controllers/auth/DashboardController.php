@@ -27,12 +27,14 @@ class DashboardController extends Controller
         $pending = Loan::where('status', 'pending')->count();
         $borrowed = Loan::where('status', 'borrowed')->count();
         $rejected = Loan::where('status', 'rejected')->count();
+        $return = Loan::where('status', 'returned')->count();
+        
 
         return view('dashboard.admin', 
         compact(
             'labels', 'counts', 
             'labelReturn', 'countReturn',
-            'pending', 'rejected', 'borrowed'
+            'pending', 'rejected', 'borrowed', 'return'
         ),
         ['title' => 'Dashboard Page']);
     }

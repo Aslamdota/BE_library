@@ -27,7 +27,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div>
-                                <h4 class="my-1 text-danger">{{ \App\Models\Returns::count() }}</h4>
+                                <h4 class="my-1 text-danger">{{ $return }}</h4>
                                 <p class="mb-0 text-secondary">Total Pengembalian</p>
                                 {{-- <p class="mb-0 font-13">+5.4% from last week</p> --}}
                             </div>

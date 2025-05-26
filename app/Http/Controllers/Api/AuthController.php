@@ -67,12 +67,7 @@ class AuthController extends Controller
             ], 401);
         }
 
-        if ($member->tokens()->count() > 0) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'account is login in device'
-            ], 403);
-        }
+        
 
         // Buat token (jika Member pakai Laravel Sanctum)
         $token = $member->createToken('auth_token')->plainTextToken;
