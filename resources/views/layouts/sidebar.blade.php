@@ -63,6 +63,22 @@
             </a>
         </li>
 
+        <li class="">
+			<a href="javascript:;" class="has-arrow" aria-expanded="false">
+						<div class="parent-icon"><i class="bx bx-cart"></i>
+						</div>
+						<div class="menu-title">Laporan</div>
+					</a>
+					<ul class="mm-collapse" style="height: 0px;">
+						<li> <a href=""><i class="bx bx-radio-circle"></i>Peminjaman</a>
+						</li>
+						<li> <a href=""><i class="bx bx-radio-circle"></i>Pengembalian</a>
+						</li>
+						<li> <a href=""><i class="bx bx-radio-circle"></i>Denda</a>
+						</li>
+					</ul>
+		</li>
+
         
     </ul>
     <!--end navigation-->

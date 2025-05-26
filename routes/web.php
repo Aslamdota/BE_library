@@ -13,6 +13,8 @@ use App\Http\Controllers\FineMasterController;
 use App\Http\Controllers\peminjaman\PeminjamanController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\ReportController;
+
 // Route::get('/', function () {
 //     return view('welcome');
 // });
@@ -82,4 +84,8 @@ Route::get('/getBookMissing', [PeminjamanController::class, 'getBookMissing'])->
 // Fine settings routes
 Route::get('/fine-settings', [FineMasterController::class, 'getFineSettings'])->name('fine.get');
 Route::post('/fine-settings', [FineMasterController::class, 'updateFineSettings'])->name('fine.update');
+
+// report
+Route::get('/reportLoan', [ReportController::class, 'reportLoan'])->middleware('auth')->name('report.loan');
+Route::get('/reportReturn', [ReportController::class, 'reportReturn'])->middleware('auth')->name('report.return');
 

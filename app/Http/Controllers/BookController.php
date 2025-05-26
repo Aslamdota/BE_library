@@ -283,7 +283,7 @@ class BookController extends Controller
 
     public function latestBooks()
     {
-        $books = Book::orderBy('created_at', 'desc')->take(4)->get();
+        $books = Book::orderBy('created_at', 'asc')->take(4)->get();
 
         $books->transform(function ($book) {
             $book->cover = $book->cover_image;
