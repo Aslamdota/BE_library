@@ -32,7 +32,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Book routes
     Route::apiResource('books', BookController::class);
-    
+
     // cari buku
     Route::get('/books/search', [BookController::class, 'search']);
     // Route::get('/books/latest', [BookController::class, 'latest']);
@@ -91,7 +91,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/getLoan/{id}', [LoanController::class, 'getLoanMember']);
 
     // delete peminjaman
-    Route::delete('/clearReturned', [LoanController::class, 'clearReturnedLoans']);
+    Route::post('/clearReturned', [LoanController::class, 'clearReturnedLoans']);
 
     // kembalikan peminjaman
     Route::put('/returns/{loan}', [ReturnBook::class, 'returnBook']);
