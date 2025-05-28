@@ -61,7 +61,9 @@ class LoanController extends Controller
 
     public function getLoan()
     {
-        $borrowings = Loan::whereIn('status', ['borrowed', 'overdue'])->with(['book', 'member', 'staff'])->get();
+        $borrowings = Loan::whereIn('status', ['borrowed', 'overdue'])
+        ->where('status_delete', 0)
+        ->with(['book', 'member', 'staff'])->get();
 
         $borrowings = $borrowings->map(function ($loan) {
             $loan->book_title = $loan->book->title ?? null;
@@ -311,11 +313,11 @@ class LoanController extends Controller
         ]);
     }
 
-    public function clearReturnedLoans()
+    public function clearReturnedLoans(Request $request)
     {
         try {
             // Hapus semua data peminjaman dengan status 'returned'
-            $loan = Loan::where('member_id', $memberid)->first();
+            $loan = Loan::where('member_id', $request->member_id)->first();
             $loan->status_delete = 1;
             $loan->save();
 
