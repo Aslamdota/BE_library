@@ -317,14 +317,15 @@ class LoanController extends Controller
     {
         try {
             // Hapus semua data peminjaman dengan status 'returned'
-            // $loan = Loan::where('member_id', $request->member_id)->first();
-            // $loan->status_delete = 1;
-            // $loan->save();
+            $memberid = Member::where('member_id', $request->member_id)->first();
 
-            return response()->json(['member_id' => $request->member_id]);
-            // return response()->json([
-            //     'message' => 'Riwayat pengembalian berhasil dihapus.'
-            // ], 200);
+            $loan = Loan::where('member_id', $memberid->id)->first();
+            $loan->status_delete = 1;
+            $loan->save();
+
+            return response()->json([
+                'message' => 'Riwayat pengembalian berhasil dihapus.'
+            ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Terjadi kesalahan saat menghapus riwayat.',
