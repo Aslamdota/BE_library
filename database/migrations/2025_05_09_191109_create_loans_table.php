@@ -28,7 +28,7 @@ return new class extends Migration
                 'overdue',
                 'lost-compensated'
             ])->default('pending');
-
+            
             $table->date('return_date')->nullable();
             $table->bigInteger('fine')->nullable();
             $table->timestamps();

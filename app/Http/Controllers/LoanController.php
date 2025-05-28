@@ -76,7 +76,9 @@ class LoanController extends Controller
 
     public function getLoanMember($id)
     {
-        $borrowings = Loan::findOrFail($id)->whereIn('status', ['borrowed', 'overdue'])->with(['book', 'member', 'staff'])->get();
+        $borrowings = Loan::findOrFail($id)->whereIn('status', ['borrowed', 'overdue'])
+        ->where('status_delete', 0)
+        ->with(['book', 'member', 'staff'])->get();
 
         $borrowings = $borrowings->map(function ($loan) {
             $loan->book_title = $loan->book->title ?? null;
@@ -289,7 +291,9 @@ class LoanController extends Controller
 
     public function getReturnedLoans()
     {
-        $loans = Loan::where('status', 'returned')->with(['book'])->get();
+        $loans = Loan::where('status', 'returned')
+        ->where('status_delete', 0)
+        ->with(['book'])->get();
 
         $loans = $loans->map(function ($loan) {
             return [
@@ -311,7 +315,9 @@ class LoanController extends Controller
     {
         try {
             // Hapus semua data peminjaman dengan status 'returned'
-            Loan::where('status', 'returned')->delete();
+            $loan = Loan::where('member_id', $memberid)->first();
+            $loan->status_delete = 1;
+            $loan->save();
 
             return response()->json([
                 'message' => 'Riwayat pengembalian berhasil dihapus.'
@@ -335,7 +341,7 @@ class LoanController extends Controller
                 ->whereMonth('loan_date', $month->month)
                 ->whereYear('loan_date', $month->year)
                 ->count();
-                
+
         if ($loans > 0) {
             $missing = new Book_missing();
             $missing->isbn = $isbn;
