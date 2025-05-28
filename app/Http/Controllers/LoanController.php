@@ -316,16 +316,29 @@ class LoanController extends Controller
     public function clearReturnedLoans(Request $request)
     {
         try {
-            // Hapus semua data peminjaman dengan status 'returned'
-            $memberid = Member::where('member_id', $request->member_id)->first();
+            $member = Member::where('member_id', $request->member_id)->first();
 
-            $loan = Loan::where('member_id', $memberid->id)->first();
-            $loan->status_delete = 1;
-            $loan->save();
+            if (!$member) {
+                return response()->json([
+                    'message' => 'Member tidak ditemukan.'
+                ], 404);
+            }
+
+            $updated = Loan::where('member_id', $member->id)
+                ->where('status', 'returned')
+                ->update(['status_delete' => 1]);
+
+            if ($updated == 0) {
+                return response()->json([
+                    'message' => 'Tidak ada data peminjaman yang perlu dihapus.'
+                ], 200);
+            }
 
             return response()->json([
-                'message' => 'Riwayat pengembalian berhasil dihapus.'
+                'message' => 'Riwayat pengembalian berhasil dihapus.',
+                'jumlah_dihapus' => $updated
             ], 200);
+
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Terjadi kesalahan saat menghapus riwayat.',
@@ -333,6 +346,7 @@ class LoanController extends Controller
             ], 500);
         }
     }
+
 
     //aslam
     public function missingBooks(Request $request, $id){
