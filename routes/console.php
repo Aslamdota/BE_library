@@ -9,5 +9,5 @@ Artisan::command('inspire', function () {
 
 // Jadwalkan command UpdateLoanFines setiap menit
 app()->make(Schedule::class)->call(function () {
-    Artisan::call('loan:update-fines');
+    Artisan::call('loans:update-fines');
 })->everyMinute();
