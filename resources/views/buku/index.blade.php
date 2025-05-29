@@ -134,16 +134,18 @@
         </div>
 
         <!-- Modal -->
-        <div class="modal fade modal-center" id="formModalCategory" tabindex="-1" aria-labelledby="formModalCategoryLabel" aria-hidden="true">
+        <div class="modal fade modal-center" id="formModalCategory" tabindex="-1"
+            aria-labelledby="formModalCategoryLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content">
-                    
+
                     <div class="modal-header">
                         <h5 class="modal-title" id="formModalLabel">Tambah Data</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form class="row g-3 needs-validation" method="post" action="{{ route('add.category') }}" novalidate="">
+                        <form class="row g-3 needs-validation" method="post" action="{{ route('add.category') }}"
+                            novalidate="">
                             @csrf
                             <div class="col-md-6">
                                 <label for="bsValidation1" class="form-label">Nama</label>
@@ -151,7 +153,7 @@
                                     is-invalid
                                 @enderror" id="bsValidation1" placeholder="Nama Buku" required="" name="name">
                                 @error('name')
-                                    <span class="text-danger">{{ $message }}</span>
+                                <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="col-md-6">
@@ -160,13 +162,13 @@
                                     is-invalid
                                 @enderror" id="bsValidation2" placeholder="Kode Buku" name="code" required="">
                                 @error('code')
-                                    <span class="text-danger">{{ $message }}</span>
+                                <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
 
 
-                            
-                            
+
+
                             <div class="col-md-12">
                                 <div class="d-md-flex d-grid align-items-center gap-3">
                                     <button type="submit" class="btn btn-primary px-4">Submit</button>
@@ -184,27 +186,31 @@
             <div class="card-header bg-transparent">
                 <div class="d-flex align-items-center">
                     <div class="row w-100 py-3">
-                <div class="col-md-6">
-                    <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#formModal">Tambah Buku</button>
-                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#formModalCategory">Tambah Kategori</button>
-                </div>
-            </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-primary me-2" data-bs-toggle="modal"
+                                data-bs-target="#formModal">Tambah Buku</button>
+                            <button class="btn btn-success" data-bs-toggle="modal"
+                                data-bs-target="#formModalCategory">Tambah Kategori</button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="card-body">
                 <ul class="nav nav-tabs nav-primary mb-4" role="tablist">
                     <li class="nav-item" role="presentation">
-        <a class="nav-link {{ session('active_tab') === 'category' ? '' : 'active' }}" data-bs-toggle="tab" href="#pinjamReturns" role="tab"
-            aria-selected="{{ session('active_tab') === 'category' ? 'false' : 'true' }}">
-            <i class="bx bx-time me-1"></i> Buku
-        </a>
-    </li>
-    <li class="nav-item" role="presentation">
-        <a class="nav-link {{ session('active_tab') === 'category' ? 'active' : '' }}" data-bs-toggle="tab" href="#kembaliReturns" role="tab"
-            aria-selected="{{ session('active_tab') === 'category' ? 'true' : 'false' }}">
-            <i class="bx bx-time me-1"></i> Category
-        </a>
-    </li>
+                        <a class="nav-link {{ session('active_tab') === 'category' ? '' : 'active' }}"
+                            data-bs-toggle="tab" href="#pinjamReturns" role="tab"
+                            aria-selected="{{ session('active_tab') === 'category' ? 'false' : 'true' }}">
+                            <i class="bx bx-time me-1"></i> Buku
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link {{ session('active_tab') === 'category' ? 'active' : '' }}"
+                            data-bs-toggle="tab" href="#kembaliReturns" role="tab"
+                            aria-selected="{{ session('active_tab') === 'category' ? 'true' : 'false' }}">
+                            <i class="bx bx-time me-1"></i> Category
+                        </a>
+                    </li>
 
 
                 </ul>
@@ -234,7 +240,7 @@
                             </table>
                         </div>
                     </div>
-                
+
 
                     <div class="tab-pane fade show" id="kembaliReturns" role="tabpanel">
                         <div class="table-responsive">
@@ -405,7 +411,9 @@
 @endpush
 
 
-@if ($errors->has('title') || $errors->has('author') || $errors->has('publisher') || $errors->has('isbn') || $errors->has('publication_year') || $errors->has('stock') || $errors->has('category_id') || $errors->has('description') || $errors->has('cover_image'))
+@if ($errors->has('title') || $errors->has('author') || $errors->has('publisher') || $errors->has('isbn') ||
+$errors->has('publication_year') || $errors->has('stock') || $errors->has('category_id') || $errors->has('description')
+|| $errors->has('cover_image'))
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var myModal = new bootstrap.Modal(document.getElementById('formModal'));

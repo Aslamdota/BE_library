@@ -149,6 +149,7 @@
                                 <th>Member</th>
                                 <th>Email</th>
                                 <th>Phone</th>
+                                <th>Address</th>
                                 <th>Avatar</th>
                                 <th>Aksi</th>
                             </tr>
@@ -207,6 +208,10 @@
                 {
                     data: 'phone',
                     name: 'phone'
+                },
+                {
+                    data: 'address',
+                    name: 'address'
                 },
                 {
                     data: 'avatar',

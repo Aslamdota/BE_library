@@ -242,6 +242,7 @@ class LoanController extends Controller
 
         $loan->status = 'borrowed';
         $loan->due_date = $request->due_date;
+        // $loan->status_fine = 'unpaid';
         $loan->save();
 
         $book = $loan->book;
@@ -298,6 +299,7 @@ class LoanController extends Controller
                 'loan_date' => $loan->loan_date,
                 'updated_at' => $loan->updated_at,
                 'status' => $loan->status,
+                // 'status_fine' => 'paid'
             ];
         });
 
@@ -398,5 +400,55 @@ class LoanController extends Controller
         }
     }
 
+    public function allFine(){
+        $now = Carbon::now();
+
+        $allFine = Loan::with('member')
+        ->where(function ($query) use ($now) {
+            $query->whereNotNull('fine')
+                  ->where('fine', '>', 0);
+        })
+        ->orWhere(function ($query) use ($now) {
+            $query->where('status', 'borrowed')
+                  ->whereDate('due_date', '<', $now);
+        })
+        ->groupBy('member_id')
+        ->selectRaw('member_id, SUM(fine) as total_fine')
+        ->with('member')
+        ->get();
+
+        return response()->json([
+            'message' => 'success',
+            'data' => $allFine
+        ]);
+    }
+
+    public function fineByMember($memberId){
+         $now = Carbon::now();
+
+        $fineData = Loan::with('member')
+            ->where('member_id', $memberId)
+            ->where(function ($query) use ($now) {
+                $query->whereNotNull('fine')
+                    ->where('fine', '>', 0)
+                    ->orWhere(function ($q) use ($now) {
+                        $q->where('status', 'borrowed')
+                            ->whereDate('due_date', '<', $now);
+                    })
+                    ->orWhere(function ($q) {
+                        $q->where('status', 'returned')
+                            ->whereColumn('return_date', '>', 'due_date');
+                    });
+            })
+            ->selectRaw('member_id, SUM(fine) as total_fine')
+            ->groupBy('member_id')
+            ->with('member')
+            ->first();
+
+            return response()->json([
+                'message' => 'success',
+                'data' => $fineData
+            ]);
+    }
 
 }

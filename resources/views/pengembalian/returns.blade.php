@@ -47,6 +47,12 @@
                     </li>
 
                     <li class="nav-item" role="presentation">
+                        <a class="nav-link" data-bs-toggle="tab" href="#fineHistory" role="tab" aria-selected="false">
+                            <i class="bx bx-history me-1"></i> Denda
+                        </a>
+                    </li>
+
+                    <li class="nav-item" role="presentation">
                         <a class="nav-link" data-bs-toggle="tab" href="#bookMissing" role="tab" aria-selected="false">
                             <i class="bx bx-history me-1"></i> Buku Hilang
                         </a>
@@ -75,6 +81,7 @@
                             </table>
                         </div>
                     </div>
+
                     <div class="tab-pane fade" id="kembaliReturns" role="tabpanel">
                         <div class="table-responsive">
                             <table id="kembali-table" class="table table-return table-hover" style="width:100%">
@@ -137,6 +144,28 @@
                                         <th width="10%">Denda</th>
                                         <th width="10%">Status</th>
                                         <th width="10%">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Data will be loaded via AJAX -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="fineHistory" role="tabpanel">
+                        <div class="table-responsive">
+                            <table id="fine-table" class="table table-return table-hover" style="width:100%">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th width="5%">No</th>
+                                        <th width="10%">Member</th>
+                                        <th>Buku</th>
+                                        <th width="10%">Tanggal Peminjaman</th>
+                                        <th width="10%">Jatuh Tempo</th>
+                                        <th width="10%">Status</th>
+                                        <th width="10%">Denda</th>
+                                        
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -1117,6 +1146,7 @@ function showMemberDetail(memberId) {
 }
 </script>
 
+{{-- book missing --}}
 <script>
 $(document).ready(function() {
     $('#bookMissingTable').DataTable({
@@ -1130,6 +1160,26 @@ $(document).ready(function() {
             { data: 'member_id', name: 'member_id' },
             { data: 'date_of_los', name: 'date_of_los' },
             { data: 'status', name: 'status', orderable: false, searchable: false },
+        ]
+    });
+});
+</script>
+
+{{-- get fine all --}}
+<script>
+$(document).ready(function () {
+    $('#fine-table').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: '{{ route("get.all.fine") }}', // Sesuaikan dengan route kamu
+        columns: [
+            { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+            { data: 'member_name', name: 'member_name' },
+            { data: 'book_title', name: 'book_title' },
+            { data: 'loan_date', name: 'loan_date' },
+            { data: 'due_date', name: 'due_date' },
+            { data: 'status', name: 'status', orderable: false, searchable: false },
+            { data: 'fine', name: 'fine' },
         ]
     });
 });

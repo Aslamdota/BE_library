@@ -207,7 +207,7 @@
                                                     <h6 class="mb-0">Password Lama</h6>
                                                 </div>
                                                 <div class="col-sm-9 text-secondary">
-                                                    <input type="password" class="form-control" value="Password Lama .."
+                                                    <input type="password" class="form-control" placeholder="Password Lama .."
                                                         name="old_password">
                                                 </div>
                                             </div>
@@ -217,7 +217,7 @@
                                                     <h6 class="mb-0">Password Baru</h6>
                                                 </div>
                                                 <div class="col-sm-9 text-secondary">
-                                                    <input type="password" class="form-control" value="Password Baru .."
+                                                    <input type="password" class="form-control" placeholder="Password Baru .."
                                                         name="password">
                                                 </div>
                                             </div>
@@ -228,7 +228,7 @@
                                                 </div>
                                                 <div class="col-sm-9 text-secondary">
                                                     <input type="password" class="form-control"
-                                                        value="Konfirmasi Password .." name="password_confirmation">
+                                                        placeholder="Konfirmasi Password .." name="password_confirmation">
                                                 </div>
                                             </div>
 

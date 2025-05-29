@@ -99,7 +99,10 @@ Route::middleware('auth:sanctum')->group(function () {
     // get buku telat dikembalikan
     Route::get('/borrowings/overdue', [BorrowingController::class, 'getOverdue']);
 
-
     Route::get('/statistics', [StatisticsController::class, 'index']);
+
+    // get semua denda
+    Route::get('/allFine', [LoanController::class, 'allFine']);
+    Route::get('/fineByMember/{memberId}', [LoanController::class, 'fineByMember']);
 
 });

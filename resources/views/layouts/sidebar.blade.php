@@ -74,7 +74,7 @@
 						</li>
 						<li> <a href=""><i class="bx bx-radio-circle"></i>Pengembalian</a>
 						</li>
-						<li> <a href=""><i class="bx bx-radio-circle"></i>Denda</a>
+						<li> <a href="{{ route('report.fine') }}"><i class="bx bx-radio-circle"></i>Denda</a>
 						</li>
 					</ul>
 		</li>

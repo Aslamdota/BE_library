@@ -301,7 +301,7 @@ class PeminjamanController extends Controller
     }
 
     public function getBookMissing(){
-        if (request()->ajax()) {
+    if (request()->ajax()) {
         $bookMissing = Book_missing::with(['member', 'book'])->latest()->get();
 
         return DataTables::of($bookMissing)
@@ -313,7 +313,7 @@ class PeminjamanController extends Controller
                 return $row->book->title ?? '-';
             })
             ->addColumn('member_id', function ($row) {
-                return $row->member->name ?? '-'; // ganti 'name' sesuai kolom nama member
+                return $row->member->name ?? '-';
             })
             ->addColumn('date_of_los', function ($row) {
                 return \Carbon\Carbon::parse($row->date_of_los)->translatedFormat('d M Y'); // ganti sesuai field
@@ -323,7 +323,38 @@ class PeminjamanController extends Controller
             })
             ->rawColumns(['status', 'isbn'])
             ->make(true);
+            }
     }
+
+    // get all denda
+    public function getAllFine(){
+            if (request()->ajax()) {
+            $now = Carbon::now();
+
+            $fines = Loan::with(['member', 'book'])
+                ->where(function ($query) use ($now) {
+                    $query->whereNotNull('fine')->where('fine', '>', 0)
+                        ->orWhere(function ($q) use ($now) {
+                            $q->where('status', 'borrowed')->whereDate('due_date', '<', $now);
+                        })
+                        ->orWhere(function ($q) {
+                            $q->where('status', 'returned')->whereColumn('return_date', '>', 'due_date');
+                        });
+                })
+                ->latest()
+                ->get();
+
+            return DataTables::of($fines)
+                ->addIndexColumn()
+                ->addColumn('member_name', fn($row) => $row->member->name ?? '-')
+                ->addColumn('book_title', fn($row) => $row->book->title ?? '-')
+                ->addColumn('loan_date', fn($row) => Carbon::parse($row->loan_date)->translatedFormat('d M Y'))
+                ->addColumn('due_date', fn($row) => Carbon::parse($row->due_date)->translatedFormat('d M Y'))
+                ->addColumn('status', fn($row) => '<span class="badge bg-primary text-white">'.$row->status.'</span>')
+                ->addColumn('fine', fn($row) => 'Rp'.number_format($row->fine ?? 0, 0, ',', '.'))
+                ->rawColumns(['status'])
+                ->make(true);
+        }
     }
 
     

@@ -81,6 +81,9 @@ Route::post('/loans/{loan}/return', [PeminjamanController::class, 'returnBook'])
 // book missing
 Route::get('/getBookMissing', [PeminjamanController::class, 'getBookMissing'])->name('get.book.missing');
 
+// get denda
+Route::get('/getAllFine', [PeminjamanController::class, 'getAllFine'])->name('get.all.fine');
+
 // Fine settings routes
 Route::get('/fine-settings', [FineMasterController::class, 'getFineSettings'])->name('fine.get');
 Route::post('/fine-settings', [FineMasterController::class, 'updateFineSettings'])->name('fine.update');
@@ -88,4 +91,5 @@ Route::post('/fine-settings', [FineMasterController::class, 'updateFineSettings'
 // report
 Route::get('/reportLoan', [ReportController::class, 'reportLoan'])->middleware('auth')->name('report.loan');
 Route::get('/reportReturn', [ReportController::class, 'reportReturn'])->middleware('auth')->name('report.return');
+Route::get('/reportFine', [ReportController::class, 'reportFine'])->middleware('auth')->name('report.fine');
 

@@ -59,7 +59,15 @@ class ReturnBook extends Controller
                 'message' => 'This book has already been returned'
             ], 400);
         }
+        
+        // jangan bisa kembalikan jika belumbayar denda
+        // if ($loan->fine > 0 && $loan->status_fine === 'unpaid') {
+        // return response()->json([   
+        //     'status' => 'error',
+        //     'message' => 'Cannot return the book because the fine has not been paid'
+        // ], 400);
 
+        
         $today = Carbon::today();
 
         $loan->return_date = $today;

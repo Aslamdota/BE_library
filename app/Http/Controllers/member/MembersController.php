@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Str;
 
 class MembersController extends Controller
 {
@@ -21,13 +22,17 @@ class MembersController extends Controller
                 ->addColumn('avatar', function ($member) {
                     return '<img src="' . asset('storage/' . $member->avatar) . '" class="product-img-2" alt="Avatar">';
                 })
+                ->addColumn('address', function ($member) {
+                    $short = Str::limit(strip_tags($member->address), 15);
+                    return '<span title="' . e($member->address) . '">' . e($short) . '</span>';
+                })
                 ->addColumn('action', function ($member) {
                     return '
                         <a href="' . route('edit.member', $member->id) . '" class="badge bg-primary">Edit</a>
                         <a href="' . route('destroy.member', $member->id) . '" class="badge bg-danger delete-btn">Hapus</a>
                     ';
                 })
-                ->rawColumns(['avatar', 'action'])
+                ->rawColumns(['avatar', 'action', 'address'])
                 ->make(true);
         }
 
