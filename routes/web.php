@@ -47,6 +47,13 @@ Route::get('/editMember/{id}', [MembersController::class, 'editMember'])->name('
 Route::post('/updateMember/{id}', [MembersController::class, 'updateMember'])->name('update.member');
 Route::get('/destroyMember/{id}', [MembersController::class, 'destroyMember'])->name('destroy.member');
 
+// kirim ulang otp
+Route::post('/member/resend-otp/{id}', [MembersController::class, 'resendOtp'])->name('resend.otp')->middleware('auth');
+
+// kirim otp
+Route::post('/member/sendOtp', [MembersController::class, 'sendOtp'])->name('send.otp')->middleware('auth');
+
+
 Route::get('/viewUsers', [UsersController::class, 'viewUsers'])->name('view.user')->middleware('auth');
 Route::get('/users/data', [UsersController::class, 'getUsersData'])->name('users.data');
 Route::post('/storeUsers', [UsersController::class, 'storeUsers'])->name('store.user')->middleware('auth');

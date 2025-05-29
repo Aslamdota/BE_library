@@ -16,7 +16,7 @@
 
 @include('layouts.style')
 
-<!-- Modaal konfirm -->
+<!-- Modaal add members -->
 <div class="modal fade modal-center" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
@@ -108,6 +108,43 @@
     </div>
 </div>
 
+{{-- modal veirify otp --}}
+<div class="modal fade modal-center" id="otpModal" tabindex="-1" aria-labelledby="otpModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="otpModalLabel">Tambah Member</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="row g-3 needs-validation" novalidate="" action="{{ route('send.otp') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="col-md-6">
+                        <label for="bsValidation1" class="form-label">Kode Otp</label>
+                        <input type="text" class="form-control @error('name')
+                                    is-invalid
+                                @enderror" id="bsValidation1" placeholder="Input otp ..." required name="otp">
+                        @error('otp')
+                        <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <input type="hidden" name="member_id" id="member_id_field" value="{{ old('member_id') }}">
+
+                    <div class="col-md-12">
+                        <div class="d-md-flex d-grid align-items-center gap-3">
+                            <button type="submit" class="btn btn-primary px-4">Submit</button>
+                            <button type="reset" class="btn btn-light px-4">Reset</button>
+                        </div>
+                    </div>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="page-wrapper">
     <div class="page-content">
 
@@ -145,6 +182,7 @@
                         <thead class="table-light">
                             <tr>
                                 <th>No</th>
+                                <th>Status Member</th>
                                 <th>Name</th>
                                 <th>Member</th>
                                 <th>Email</th>
@@ -179,15 +217,28 @@
 
 <script>
     $(document).ready(function () {
+        // Inisialisasi DataTable
         $('#members-table').DataTable({
             processing: true,
             serverSide: true,
             ajax: '{{ route("view.member") }}',
-            columns: [{
+            columns: [
+                {
                     data: 'DT_RowIndex',
                     name: 'DT_RowIndex',
                     orderable: false,
                     searchable: false
+                },
+                {
+                    data: 'is_active',
+                    name: 'is_active',
+                    render: function (data, type, row) {
+                        if (data) {
+                            return '<span class="badge bg-success text-white shadow-sm">Active</span>';
+                        } else {
+                            return '<span class="badge bg-warning text-dark shadow-sm activation-badge" style="cursor:pointer;" data-id="' + row.id + '">Activation</span>';
+                        }
+                    }
                 },
                 {
                     data: 'name',
@@ -228,7 +279,7 @@
             ]
         });
 
-        // Handle delete button
+        // Handle tombol delete
         $('#members-table').on('click', '.delete-btn', function (e) {
             e.preventDefault();
             let url = $(this).attr('href');
@@ -261,19 +312,36 @@
                 }
             });
         });
-    });
 
+        // Handle klik badge Activation
+        $('#members-table').on('click', '.activation-badge', function () {
+        let memberId = $(this).data('id');
+        $('#member_id_field').val(memberId);
+        $('#otpModal').modal('show');
+    });
+    });
 </script>
+
 
 @endpush
 
-@if ($errors->any())
+@if ($errors->has('name') || $errors->has('address') || $errors->has('email') || 
+$errors->has('Password') || $errors->has('phone') || $errors->has('avatar'))
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var myModal = new bootstrap.Modal(document.getElementById('formModal'));
         myModal.show();
     });
+</script>
+@endif
 
+@if ($errors->has('otp'))
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var myModalCategory = new bootstrap.Modal(document.getElementById('otpModal'));
+        myModalCategory.show();
+    });
 </script>
 @endif
 

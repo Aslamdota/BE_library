@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('address')->nullable();
             $table->string('password');
             $table->boolean('is_active')->default(false);
+            $table->boolean('is_login')->default(false);
             $table->string('otp_code')->nullable();
             $table->timestamp('otp_expires_at')->nullable();
             $table->string('avatar')->nullable()->default('avatar.jpg');

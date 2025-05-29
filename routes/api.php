@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 // Authentication routes
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
-Route::post('/logout', [AuthController::class, 'logout']);
+
 
 // reset password member
 Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.reset');
@@ -24,6 +24,7 @@ Route::post('/new-password', [AuthController::class, 'newPassword']);
 
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
 
     // member
     Route::put('/update/profile/{id}', [MemberController::class, 'update']);

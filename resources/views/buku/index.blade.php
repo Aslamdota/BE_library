@@ -414,6 +414,7 @@
 @if ($errors->has('title') || $errors->has('author') || $errors->has('publisher') || $errors->has('isbn') ||
 $errors->has('publication_year') || $errors->has('stock') || $errors->has('category_id') || $errors->has('description')
 || $errors->has('cover_image'))
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var myModal = new bootstrap.Modal(document.getElementById('formModal'));

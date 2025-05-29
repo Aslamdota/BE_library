@@ -47,12 +47,24 @@ class MemberController extends Controller
             ], 422);
         }
 
+        
+    
         $member = new Member();
         $member->name = $request->name;
         $member->member_id = $request->member_id;
         $member->email = $request->email;
         $member->phone = $request->phone;
         $member->address = $request->address;
+
+        if ($member->is_login) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'This account is already logged in from another device',
+            ], 403);
+        }
+
+        // Set is_login menjadi true
+        $member->is_login = true;
 
         $member->save();
 
@@ -275,4 +287,7 @@ class MemberController extends Controller
             'data'  => $user
         ]);
     }
+
+
+    
 }

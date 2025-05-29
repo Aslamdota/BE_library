@@ -60,12 +60,30 @@ class AuthController extends Controller
 
         $member = Member::where('email', $request->email)->first();
 
+        if (!$member->is_active) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'member has not actived'
+            ]);
+        }
+
         if (!$member || !Hash::check($request->password, $member->password)) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Invalid login credentials',
             ], 401);
         }
+
+        
+        if ($member->is_login) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'This account is already logged in from another device',
+            ], 403);
+        }
+
+        $member->is_login = true;
+        $member->save();
 
         
 
@@ -86,18 +104,18 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
-        // Hapus semua token pengguna
-        $request->user()->tokens()->delete();
+        $user = $request->user();
 
-        // Logout pengguna
-        Auth::logout();
+        // Hapus semua token
+        $user->tokens()->delete();
 
-        // Invalidasi sesi
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        // Set is_login jadi false
+        $user->is_login = false;
+        $user->save();
 
         return response()->json([
-            'message' => 'Successfully logged out',
+            'status' => 'success',
+            'message' => 'Logged out successfully',
         ]);
     }
 
