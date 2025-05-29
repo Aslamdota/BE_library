@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MemberOtpMail;
 
 class MembersController extends Controller
 {
@@ -58,7 +60,8 @@ class MembersController extends Controller
             $avatar = $request->file('avatar')->store('members', 'public');
         }
 
-        Member::create([
+        $otpCode = rand(100000, 999999);
+        $member = Member::create([
             'name' => $request->name,
             'member_id' => hexdec(uniqid()),
             'email' => $request->email,
@@ -66,7 +69,13 @@ class MembersController extends Controller
             'phone' => $request->phone,
             'address' => $request->address,
             'avatar' => $avatar,
+            'otp_code' => $otpCode,
+            'is_active' => false,
+            'otp_expires_at' => now()->addMinutes(10)
         ]);
+
+        // kirim email ke member
+        Mail::to($request->email)->send(new MemberOtpMail($member));
 
         $notif = array(
             'message' => 'Member Berhasil ditambahkan',

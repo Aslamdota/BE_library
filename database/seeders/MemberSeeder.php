@@ -19,6 +19,7 @@ class MemberSeeder extends Seeder
             'email'      => 'jane@example.com',
             'phone'      => '081234567890',
             'password'   => Hash::make('password123'), // Menggunakan Hash::make
+            'is_active' => true,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -29,6 +30,7 @@ class MemberSeeder extends Seeder
             'email'      => 'janesmith@example.com',
             'phone'      => '084985746',
             'password'   => Hash::make('password123'), // Menggunakan Hash::make
+            'is_active' => true,
             'created_at' => now(),
             'updated_at' => now(),
         ]);

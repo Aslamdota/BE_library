@@ -28,12 +28,7 @@ return new class extends Migration
                 'overdue',
                 'lost-compensated'
             ])->default('pending');
-<<<<<<< HEAD
             $table->enum('status_fine', ['unpaid', 'paid'])->nullable();
-
-=======
-            
->>>>>>> 40239f580d6221d90b330ce24c6c77e1f15b3f96
             $table->date('return_date')->nullable();
             $table->bigInteger('fine')->nullable();
             $table->timestamps();
