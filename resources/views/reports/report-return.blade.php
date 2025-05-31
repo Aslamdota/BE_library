@@ -25,9 +25,9 @@
                                 class="bx bx-dots-horizontal-rounded font-22 text-option"></i>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ route('cetak.fine') }}">Cetak Pdf</a>
+                            <li><a class="dropdown-item" href="{{ route('cetak.return') }}" target="_blank">Cetak Pdf</a>
                             </li>
-                            <li><a class="dropdown-item" href="{{ route('cetak.fine.excel') }}">Cetak Excel</a>
+                            <li><a class="dropdown-item" href="{{ route('cetak.return.excel') }}">Cetak Excel</a>
                             </li>
                             <li>
                                 <hr class="dropdown-divider">
@@ -49,8 +49,8 @@
                                 <th width="10%">Buku</th>
                                 <th width="10%">Tanggal Peminjaman</th>
                                 <th width="10%">Jatuh Tempo</th>
+                                <th width="10%">Tanggal Dikembalikan</th>
                                 <th width="10%">Status</th>
-                                <th width="10%">Denda</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -84,15 +84,15 @@ $(document).ready(function () {
     $('#fine-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: '{{ route("report.fine") }}', // Sesuaikan dengan route kamu
+        ajax: '{{ route("report.return") }}', // Sesuaikan dengan route kamu
         columns: [
             { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
             { data: 'member_name', name: 'member_name' },
             { data: 'book_title', name: 'book_title' },
             { data: 'loan_date', name: 'loan_date' },
             { data: 'due_date', name: 'due_date' },
+            { data: 'return_date', name: 'return_date' },
             { data: 'status', name: 'status', orderable: false, searchable: false },
-            { data: 'fine', name: 'fine' },
         ]
     });
 });

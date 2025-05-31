@@ -70,9 +70,9 @@
 						<div class="menu-title">Laporan</div>
 					</a>
 					<ul class="mm-collapse" style="height: 0px;">
-						<li> <a href=""><i class="bx bx-radio-circle"></i>Peminjaman</a>
+						<li> <a href="{{ route('report.loan') }}"><i class="bx bx-radio-circle"></i>Peminjaman</a>
 						</li>
-						<li> <a href=""><i class="bx bx-radio-circle"></i>Pengembalian</a>
+						<li> <a href="{{ route('report.return') }}"><i class="bx bx-radio-circle"></i>Pengembalian</a>
 						</li>
 						<li> <a href="{{ route('report.fine') }}"><i class="bx bx-radio-circle"></i>Denda</a>
 						</li>

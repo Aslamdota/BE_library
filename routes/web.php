@@ -15,6 +15,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\ReportController;
 
+use App\Exports\FinesExport;
+use App\Exports\LoansExport;
+use App\Exports\ReturnedExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 // Route::get('/', function () {
 //     return view('welcome');
 // });
@@ -54,6 +59,8 @@ Route::post('/member/resend-otp/{id}', [MembersController::class, 'resendOtp'])-
 Route::post('/member/sendOtp', [MembersController::class, 'sendOtp'])->name('send.otp')->middleware('auth');
 
 
+
+
 Route::get('/viewUsers', [UsersController::class, 'viewUsers'])->name('view.user')->middleware('auth');
 Route::get('/users/data', [UsersController::class, 'getUsersData'])->name('users.data');
 Route::post('/storeUsers', [UsersController::class, 'storeUsers'])->name('store.user')->middleware('auth');
@@ -91,12 +98,36 @@ Route::get('/getBookMissing', [PeminjamanController::class, 'getBookMissing'])->
 // get denda
 Route::get('/getAllFine', [PeminjamanController::class, 'getAllFine'])->name('get.all.fine');
 
+// report fine
+
+
 // Fine settings routes
 Route::get('/fine-settings', [FineMasterController::class, 'getFineSettings'])->name('fine.get');
 Route::post('/fine-settings', [FineMasterController::class, 'updateFineSettings'])->name('fine.update');
 
-// report
+// report loan
 Route::get('/reportLoan', [ReportController::class, 'reportLoan'])->middleware('auth')->name('report.loan');
+// cetak pdf loan
+Route::get('/cetakLoan/pdf', [ReportController::class, 'cetakLoan'])->middleware('auth')->name('cetak.loan');
+// cetak loan excel
+Route::get('/cetakLoan/Excel', function () {
+    return Excel::download(new LoansExport, 'laporan-peminjaman.xlsx');
+})->name('cetak.loan.excel');
+
+// report return
 Route::get('/reportReturn', [ReportController::class, 'reportReturn'])->middleware('auth')->name('report.return');
+// cetak return pdf
+Route::get('/cetakReturn/pdf', [ReportController::class, 'cetakReturn'])->middleware('auth')->name('cetak.return');
+Route::get('/cetakReturn/Excel', function () {
+    return Excel::download(new ReturnedExport, 'laporan-pengembalian.xlsx');
+})->name('cetak.return.excel');
+
+// tampilkan report fine
 Route::get('/reportFine', [ReportController::class, 'reportFine'])->middleware('auth')->name('report.fine');
+// cetak fine pdf
+Route::get('/cetaKFine/pdf', [ReportController::class, 'cetakFine'])->name('cetak.fine')->middleware('auth');
+// cetak fine excel
+Route::get('/cetakFine/Excel', function () {
+    return Excel::download(new FinesExport, 'laporan-denda.xlsx');
+})->name('cetak.fine.excel');
 
