@@ -231,6 +231,23 @@ class BookController extends Controller
         ]);
     }
 
+    public function recomendationBook(){
+        $books = Book::with('category')->orderBy('created_at', 'desc')->paginate(10);
+
+        $books->getCollection()->transform(function ($book) {
+            $book->cover = $book->cover_image;
+            $book->cover_url = $book->cover_image
+                ? url('storage/books/' . ltrim($book->cover_image, '/'))
+                : null;
+            return $book;
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $books
+        ]);
+    }
+
     public function getRecomendation($memberId)
     {
         $favorit = Borrowing::where('member_id', $memberId)

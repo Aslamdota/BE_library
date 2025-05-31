@@ -98,10 +98,10 @@ class AuthController extends Controller
         ]);
     }
 
-
     /**
      * Proses logout pengguna.
      */
+
     public function logout(Request $request)
     {
         $user = $request->user();

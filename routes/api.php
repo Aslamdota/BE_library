@@ -35,7 +35,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('books', BookController::class);
 
     // cari buku
-    Route::get('/books/search', [BookController::class, 'search']);
+    Route::post('/books/search', [BookController::class, 'search']);
     // Route::get('/books/latest', [BookController::class, 'latest']);
 
     // get buku by category
@@ -52,6 +52,9 @@ Route::middleware('auth:sanctum')->group(function () {
     // buku terlaris /populer
     Route::get('/bestSeller', [BookController::class, 'bestSeller']);
     Route::get('/latestBook', [BookController::class, 'latestBooks']);
+
+    //rekomendasi buku terbaru
+    Route::get('/recomendation/book', [BookController::class, 'recomendationBook']);
 
     // Category routes
     Route::apiResource('categories', CategoryController::class);
