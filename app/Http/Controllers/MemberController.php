@@ -47,8 +47,8 @@ class MemberController extends Controller
             ], 422);
         }
 
-        
-    
+
+
         $member = new Member();
         $member->name = $request->name;
         $member->member_id = $request->member_id;
@@ -62,9 +62,6 @@ class MemberController extends Controller
                 'message' => 'This account is already logged in from another device',
             ], 403);
         }
-
-        // Set is_login menjadi true
-        $member->is_login = true;
 
         $member->save();
 
@@ -145,7 +142,7 @@ class MemberController extends Controller
             'status' => 'success',
             'message' => 'Member updated successfully',
             'data' => $member
-            
+
         ]);
     }
 
@@ -289,5 +286,5 @@ class MemberController extends Controller
     }
 
 
-    
+
 }

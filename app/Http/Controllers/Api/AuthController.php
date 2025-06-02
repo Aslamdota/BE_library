@@ -74,7 +74,7 @@ class AuthController extends Controller
             ], 401);
         }
 
-        
+
         if ($member->is_login) {
             return response()->json([
                 'status' => 'error',
@@ -85,7 +85,6 @@ class AuthController extends Controller
         $member->is_login = true;
         $member->save();
 
-        
 
         // Buat token (jika Member pakai Laravel Sanctum)
         $token = $member->createToken('auth_token')->plainTextToken;
@@ -138,7 +137,7 @@ class AuthController extends Controller
 
         return $status === Password::RESET_LINK_SENT
             ? response()->json(['message' => __($status),
-                                'acces_token' => $token                
+                                'acces_token' => $token
             ])
             : response()->json(['message' => __($status)], 400);
 
@@ -166,5 +165,5 @@ class AuthController extends Controller
             : response()->json(['message' => __($status)], 400);
     }
 
-    
+
 }
