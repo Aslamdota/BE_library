@@ -475,4 +475,40 @@ class LoanController extends Controller
             ]);
     }
 
+    public function returnBook(Loan $loan)
+    {
+        if ($loan->status === 'returned') {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'This book has already been returned'
+            ], 400);
+        }
+
+        $today = Carbon::today();
+
+        $loan->return_date = $today;
+        $finemaster = Finemaster::where('status', 'active')->first();
+
+        if ($today->isAfter($loan->due_date)) {
+            $daysLate = $today->diffInDays($finemaster->date_priode);
+            $finePerDay = $finemaster->fine_amount;
+            $loan->fine = $daysLate * $finePerDay;
+            $loan->status = 'overdue';
+        } else {
+            $loan->status = 'returned';
+        }
+
+        $loan->save();
+
+        // Increase book stock
+        $book = Book::find($loan->book_id);
+        $book->stock += 1;
+        $book->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Book returned successfully',
+            'data' => $loan->load(['book', 'member', 'staff'])
+        ]);
+    }
 }

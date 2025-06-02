@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\master;
 
+
+use App\Http\Controllers\Controller;
 use App\Models\Book;
 use App\Models\Borrowing;
 use App\Models\Loan;

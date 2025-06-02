@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\master;
 
+use App\Http\Controllers\Controller;
 use App\Models\Finemaster;
 use Illuminate\Http\Request;
 
@@ -10,7 +11,7 @@ class FineMasterController extends Controller
     public function getFineSettings()
     {
         $fine = Finemaster::where('status', 'active')->first();
-        
+
         if (!$fine) {
             $fine = FineMaster::create([
                 'fine_amount' => 5000,
@@ -18,7 +19,7 @@ class FineMasterController extends Controller
                 'status' => 'active'
             ]);
         }
-        
+
         return response()->json($fine);
     }
 
@@ -31,7 +32,7 @@ class FineMasterController extends Controller
 
         // Deactivate all current settings
         Finemaster::where('status', 'active')->update(['status' => 'inactive']);
-        
+
         // Create new active setting
         $fine = Finemaster::create([
             'fine_amount' => $request->fine_amount,

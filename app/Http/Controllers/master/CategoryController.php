@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\master;
 
+use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -35,7 +36,7 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    
+
     public function store(Request $request)
     {
         // Validasi input
@@ -67,7 +68,7 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    
+
     public function show(Category $category)
     {
         return response()->json([
@@ -87,7 +88,7 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    
+
     public function update(Request $request, Category $category)
     {
         // Validasi input
@@ -122,7 +123,7 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    
+
     public function destroy(Category $category)
     {
         $category->delete();

@@ -8,11 +8,11 @@ use App\Http\Controllers\books\CategoryController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\member\MembersController;
 use App\Http\Controllers\member\UsersController;
-use App\Http\Controllers\MemberController;
-use App\Http\Controllers\FineMasterController;
+use App\Http\Controllers\master\MemberController;
+use App\Http\Controllers\master\FineMasterController;
 use App\Http\Controllers\peminjaman\PeminjamanController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\BookController;
+use App\Http\Controllers\master\BookController;
 use App\Http\Controllers\ReportController;
 
 use App\Exports\FinesExport;
