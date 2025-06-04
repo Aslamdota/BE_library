@@ -1,0 +1,64 @@
+version: '4.4'
+
+services:
+  laravel:
+    container_name: be_library
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/var/www/html
+      - /var/www/html/vendor # Exclude vendor from host
+    ports:
+      - "8000:80"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - laravel-net
+    env_file:
+      - .env
+    command: >
+      bash -c "
+      echo 'Waiting for database...' &&
+      while ! mysqladmin ping -hdb -u${DB_USERNAME} -p${DB_PASSWORD} --silent; do
+        sleep 2
+      done &&
+      php artisan config:clear &&
+      php artisan cache:clear &&
+      php artisan migrate --force &&
+      apache2-foreground
+      "
+    environment:
+      - DB_HOST=db  # Harus sama dengan nama service database
+      - DB_PORT=3306
+      - DB_DATABASE=perpustakaan_api
+      - DB_USERNAME=aslam
+      - DB_PASSWORD=perpus
+
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_DATABASE: perpustakaan_api
+      MYSQL_USER: aslam
+      MYSQL_PASSWORD: perpus
+      MYSQL_ROOT_PASSWORD: perpus
+      TZ: "Asia/Jakarta"
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:  # <-- TAMBAHKAN INI
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u$${MYSQL_USER}", "-p$${MYSQL_PASSWORD}"]
+      interval: 5s
+      timeout: 10s
+      retries: 30
+    networks:
+      - laravel-net
+
+networks:
+  laravel-net:
+    driver: bridge
+
+volumes:
+  db_data:
