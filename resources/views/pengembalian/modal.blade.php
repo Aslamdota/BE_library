@@ -24,7 +24,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating">
-                                <input type="date" class="form-control" id="return_date" name="return_date" placeholder="Tanggal Kembali" required>
+                                <input type="date" class="form-control" id="return_date"  name="return_date" placeholder="Tanggal Kembali" required>
                                 <label for="return_date">Tanggal Kembali</label>
                             </div>
                         </div>
@@ -139,7 +139,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="card border-0 shadow-sm">
                     <div class="card-body">
                         <h6 class="card-title text-primary"><i class="bx bx-calendar me-2"></i> Detail Peminjaman</h6>
