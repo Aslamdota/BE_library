@@ -39,7 +39,7 @@
                             <i class="bx bx-time me-1"></i> Kembali
                         </a>
                     </li>
-                    
+
                     <li class="nav-item" role="presentation">
                         <a class="nav-link" data-bs-toggle="tab" href="#returnHistory" role="tab" aria-selected="false">
                             <i class="bx bx-history me-1"></i> Riwayat
@@ -58,7 +58,7 @@
                         </a>
                     </li>
                 </ul>
-                
+
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="pinjamReturns" role="tabpanel">
                         <div class="table-responsive">
@@ -103,7 +103,7 @@
                             </table>
                         </div>
                     </div>
-                    
+
                     <div class="tab-pane fade" id="returnHistory" role="tabpanel">
                         <div class="row mb-3">
                             <div class="col-md-4">
@@ -129,7 +129,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="table-responsive">
                             <table id="history-table" class="table table-return table-hover" style="width:100%">
                                 <thead class="table-light">
@@ -165,7 +165,7 @@
                                         <th width="10%">Jatuh Tempo</th>
                                         <th width="10%">Status</th>
                                         <th width="10%">Denda</th>
-                                        
+
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -213,7 +213,14 @@
 <script src="{{ asset('assets/custom/js/daterangepicker.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/datatable/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/datatable/js/dataTables.bootstrap5.min.js') }}"></script>
-	
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const today = new Date();
+        const formattedDate = today.toISOString().split('T')[0];
+        document.getElementById('return_date').value = formattedDate;
+    });
+</script>
+
 <script>
 $(document).ready(function() {
     // Check if required elements exist before initializing
@@ -266,7 +273,7 @@ $(document).ready(function() {
     if ($('#return_date').length) {
         $('#return_date').val(new Date().toISOString().split('T')[0]);
     }
-    
+
     // Initialize DataTables only if tables exist
     var kembaliTable, historyTable, pinjamTable;
     if ($('#pinjam-table').length) {
@@ -292,23 +299,23 @@ $(document).ready(function() {
                 }
             },
             columns: [
-                { 
-                    data: 'DT_RowIndex', 
-                    name: 'DT_RowIndex', 
-                    orderable: false, 
+                {
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex',
+                    orderable: false,
                     searchable: false,
                     className: 'text-center'
                 },
-                { 
-                    data: 'id', 
+                {
+                    data: 'id',
                     name: 'id',
                     className: 'text-center',
                     render: function(data) {
                         return 'PJ-' + (data ? data.toString().padStart(4, '0') : '0000');
                     }
                 },
-                { 
-                    data: 'book.title', 
+                {
+                    data: 'book.title',
                     name: 'book.title',
                     render: function(data, type, row) {
                         if (!row.book) return '-';
@@ -320,8 +327,8 @@ $(document).ready(function() {
                         </div>`;
                     }
                 },
-                { 
-                    data: 'member.name', 
+                {
+                    data: 'member.name',
                     name: 'member.name',
                     render: function(data, type, row) {
                         if (!row.member) return '-';
@@ -331,27 +338,27 @@ $(document).ready(function() {
                         </div>`;
                     }
                 },
-                { 
-                    data: 'loan_date', 
+                {
+                    data: 'loan_date',
                     name: 'loan_date',
                     render: function(data) {
                         return data ? moment(data).format('DD MMM YYYY') : '-';
                     }
                 },
-                { 
-                    data: 'due_date', 
+                {
+                    data: 'due_date',
                     name: 'due_date',
                     render: function(data) {
                         if (!data) return '-';
                         const dueDate = moment(data);
                         const today = moment();
                         const isOverdue = dueDate.isBefore(today, 'day');
-                        
+
                         return `<span class="fw-bold ${isOverdue ? 'text-danger' : ''}">${dueDate.format('DD MMM YYYY')}</span>`;
                     }
                 },
-                { 
-                    data: 'status', 
+                {
+                    data: 'status',
                     name: 'status',
                     className: 'text-center',
                     render: function(data) {
@@ -398,7 +405,7 @@ $(document).ready(function() {
                         $(this).removeClass('shadow-sm');
                     }
                 );
-                
+
                 $('.view-detail').hover(
                     function() {
                         $(this).addClass('shadow-sm');
@@ -411,7 +418,7 @@ $(document).ready(function() {
         });
     }
 
-    
+
     if ($('#kembali-table').length) {
         kembaliTable = $('#kembali-table').DataTable({
             processing: true,
@@ -435,23 +442,23 @@ $(document).ready(function() {
                 }
             },
             columns: [
-                { 
-                    data: 'DT_RowIndex', 
-                    name: 'DT_RowIndex', 
-                    orderable: false, 
+                {
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex',
+                    orderable: false,
                     searchable: false,
                     className: 'text-center'
                 },
-                { 
-                    data: 'id', 
+                {
+                    data: 'id',
                     name: 'id',
                     className: 'text-center',
                     render: function(data) {
                         return 'PJ-' + (data ? data.toString().padStart(4, '0') : '0000');
                     }
                 },
-                { 
-                    data: 'book.title', 
+                {
+                    data: 'book.title',
                     name: 'book.title',
                     render: function(data, type, row) {
                         if (!row.book) return '-';
@@ -463,8 +470,8 @@ $(document).ready(function() {
                         </div>`;
                     }
                 },
-                { 
-                    data: 'member.name', 
+                {
+                    data: 'member.name',
                     name: 'member.name',
                     render: function(data, type, row) {
                         if (!row.member) return '-';
@@ -474,27 +481,27 @@ $(document).ready(function() {
                         </div>`;
                     }
                 },
-                { 
-                    data: 'loan_date', 
+                {
+                    data: 'loan_date',
                     name: 'loan_date',
                     render: function(data) {
                         return data ? moment(data).format('DD MMM YYYY') : '-';
                     }
                 },
-                { 
-                    data: 'due_date', 
+                {
+                    data: 'due_date',
                     name: 'due_date',
                     render: function(data) {
                         if (!data) return '-';
                         const dueDate = moment(data);
                         const today = moment();
                         const isOverdue = dueDate.isBefore(today, 'day');
-                        
+
                         return `<span class="fw-bold ${isOverdue ? 'text-danger' : ''}">${dueDate.format('DD MMM YYYY')}</span>`;
                     }
                 },
-                { 
-                    data: 'status', 
+                {
+                    data: 'status',
                     name: 'status',
                     className: 'text-center',
                     render: function(data) {
@@ -519,7 +526,7 @@ $(document).ready(function() {
                     render: function(data, type, row) {
                         if (!row.id) return '-';
                         return `
-                            <div class="btn-group" role="group">                                
+                            <div class="btn-group" role="group">
                                 <button class="btn btn-sm btn-outline-secondary view-detail" data-id="${row.id}" title="LihatDetail">
                                     <i class="bx bx-show"></i>
                                 </button>
@@ -538,7 +545,7 @@ $(document).ready(function() {
                         $(this).removeClass('shadow-sm');
                     }
                 );
-                
+
                 $('.view-detail').hover(
                     function() {
                         $(this).addClass('shadow-sm');
@@ -580,23 +587,23 @@ $(document).ready(function() {
                 }
             },
             columns: [
-                { 
-                    data: 'DT_RowIndex', 
-                    name: 'DT_RowIndex', 
-                    orderable: false, 
+                {
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex',
+                    orderable: false,
                     searchable: false,
                     className: 'text-center'
                 },
-                { 
-                    data: 'id', 
+                {
+                    data: 'id',
                     name: 'id',
                     className: 'text-center',
                     render: function(data) {
                         return 'PJ-' + (data ? data.toString().padStart(4, '0') : '0000');
                     }
                 },
-                { 
-                    data: 'book.title', 
+                {
+                    data: 'book.title',
                     name: 'book.title',
                     render: function(data, type, row) {
                         if (!row.book) return '-';
@@ -608,8 +615,8 @@ $(document).ready(function() {
                         </div>`;
                     }
                 },
-                { 
-                    data: 'member.name', 
+                {
+                    data: 'member.name',
                     name: 'member.name',
                     render: function(data, type, row) {
                         if (!row.member) return '-';
@@ -619,38 +626,38 @@ $(document).ready(function() {
                         </div>`;
                     }
                 },
-                { 
-                    data: 'loan_date', 
+                {
+                    data: 'loan_date',
                     name: 'loan_date',
                     render: function(data) {
                         return data ? moment(data).format('DD MMM YYYY') : '-';
                     }
                 },
-                { 
-                    data: 'due_date', 
+                {
+                    data: 'due_date',
                     name: 'due_date',
                     render: function(data) {
                         return data ? moment(data).format('DD MMM YYYY') : '-';
                     }
                 },
-                { 
-                    data: 'return_date', 
+                {
+                    data: 'return_date',
                     name: 'return_date',
                     render: function(data) {
                         if (!data) return '-';
                         return moment(data).format('DD MMM YYYY');
                     }
                 },
-                { 
-                    data: 'fine', 
+                {
+                    data: 'fine',
                     name: 'fine',
                     className: 'text-end',
                     render: function(data) {
                         return data ? `<span class="fine-amount">Rp ${parseInt(data).toLocaleString('id-ID')}</span>` : '-';
                     }
                 },
-                { 
-                    data: 'status', 
+                {
+                    data: 'status',
                     name: 'status',
                     className: 'text-center',
                     render: function(data) {
@@ -743,7 +750,7 @@ $(document).ready(function() {
     // Show return modal
     $(document).on('click', '.process-return', function() {
         var loanId = $(this).data('id');
-        
+
         $.ajax({
             url: "/loans/" + loanId,
             type: "GET",
@@ -795,21 +802,21 @@ $(document).ready(function() {
                         </div>
                     </div>
                 `);
-                
+
                 // Set form values
                 $('#loan_id').val(data.id || '');
                 $('#loan_date').val(data.loan_date ? moment(data.loan_date).format('DD MMMM YYYY') : '-');
                 $('#due_date').val(data.due_date ? moment(data.due_date).format('DD MMMM YYYY') : '-');
                 $('#return_date').val(new Date().toISOString().split('T')[0]);
-                
+
                 // Store original due date for calculation
                 $('#due_date').data('original-date', data.due_date);
-                
+
                 // Calculate fine if overdue
                 if (data.due_date) {
                     calculateFine(data.due_date);
                 }
-                
+
                 $('#returnModal').modal('show');
             },
             error: function(xhr) {
@@ -835,10 +842,10 @@ $(document).ready(function() {
     function calculateFine(dueDate) {
         var returnDate = $('#return_date').val();
         if (!returnDate) return;
-        
+
         var returnDateObj = new Date(returnDate);
         var dueDateObj = new Date(dueDate);
-        
+
         if (returnDateObj > dueDateObj) {
             var diffDays = Math.ceil((returnDateObj - dueDateObj) / (1000 * 60 * 60 * 24));
             $.ajax({
@@ -862,9 +869,9 @@ $(document).ready(function() {
         e.preventDefault();
         var form = $(this);
         var submitBtn = form.find('button[type="submit"]');
-        
+
         submitBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Menyimpan...');
-        
+
         $.ajax({
             url: "/loans/" + ($('#loan_id').val() || '') + "/return",
             type: "POST",
@@ -877,7 +884,7 @@ $(document).ready(function() {
                     timer: 2000,
                     showConfirmButton: false
                 });
-                
+
                 $('#returnModal').modal('hide');
                 if (typeof pinjamTable !== 'undefined') {
                     pinjamTable.ajax.reload();
@@ -907,15 +914,15 @@ $(document).ready(function() {
 
     // Load and handle fine settings
     loadFineSettings();
-    
+
     if ($('#fineSettingForm').length) {
         $('#fineSettingForm').submit(function(e) {
             e.preventDefault();
             var form = $(this);
             var submitBtn = form.find('button[type="submit"]');
-            
+
             submitBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Menyimpan...');
-            
+
             $.ajax({
                 url: "{{ route('fine.update') }}",
                 type: "POST",
@@ -960,14 +967,14 @@ $(document).ready(function() {
                 <p class="mt-2">Memuat detail peminjaman...</p>
             </div>
         `);
-        
+
         $.ajax({
             url: "/loans/" + loanId,
             type: "GET",
             success: function(data) {
                 // Check if modal still exists (user hasn't closed it)
                 if (!$('#detailModal').length) return;
-                
+
                 // Populate modal with data
                 let modalContent = `
                     <div class="row">
@@ -995,7 +1002,7 @@ $(document).ready(function() {
                             <p><strong>Jatuh Tempo:</strong> ${data.due_date ? moment(data.due_date).format('DD MMMM YYYY') : '-'}</p>
                             <p><strong>Tanggal Kembali:</strong> ${data.return_date ? moment(data.return_date).format('DD MMMM YYYY') : '-'}</p>
                 `;
-                
+
                 // Calculate duration
                 if (data.loan_date) {
                     const loanDate = moment(data.loan_date);
@@ -1003,7 +1010,7 @@ $(document).ready(function() {
                     const duration = returnDate.diff(loanDate, 'days') + 1;
                     modalContent += `<p><strong>Durasi:</strong> ${duration} hari</p>`;
                 }
-                
+
                 // Status with badge
                 let statusText = '';
                 switch(data.status) {
@@ -1015,7 +1022,7 @@ $(document).ready(function() {
                     default: statusText = data.status || '-';
                 }
                 modalContent += `<p><strong>Status:</strong> <span class="badge badge-${data.status || ''}">${statusText}</span></p>`;
-                
+
                 // Fine and notes
                 modalContent += `
                             <p><strong>Denda:</strong> ${data.fine ? 'Rp ' + parseInt(data.fine).toLocaleString('id-ID') : 'Rp 0'}</p>
@@ -1023,19 +1030,19 @@ $(document).ready(function() {
                         </div>
                     </div>
                 `;
-                
+
                 $('#detailModal .modal-body').html(modalContent);
             },
             error: function(xhr) {
                 // Check if modal still exists (user hasn't closed it)
                 if (!$('#detailModal').length) return;
-                
+
                 $('#detailModal .modal-body').html(`
                     <div class="alert alert-danger">
                         Gagal memuat detail peminjaman. Silakan coba lagi.
                     </div>
                 `);
-                
+
                 Swal.fire({
                     icon: 'error',
                     title: 'Gagal',
@@ -1063,13 +1070,13 @@ $(document).ready(function() {
 // Show book detail
 function showBookDetail(bookId) {
     if (!bookId) return;
-    
+
     Swal.fire({
         title: 'Memuat detail buku...',
         allowOutsideClick: false,
         didOpen: () => {
             Swal.showLoading();
-            
+
             $.ajax({
                 url: "/books/" + bookId,
                 type: "GET",
@@ -1106,13 +1113,13 @@ function showBookDetail(bookId) {
 // Show member detail
 function showMemberDetail(memberId) {
     if (!memberId) return;
-    
+
     Swal.fire({
         title: 'Memuat detail member...',
         allowOutsideClick: false,
         didOpen: () => {
             Swal.showLoading();
-            
+
             $.ajax({
                 url: "/members/" + memberId,
                 type: "GET",
