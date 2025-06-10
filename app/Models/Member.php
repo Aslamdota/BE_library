@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
@@ -14,13 +13,48 @@ class Member extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable, CanResetPassword;
 
     protected $table = 'members';
-    protected $guarded = [];
-    // app/Models/Member.php
+
+    /**
+     * Kolom yang bisa diisi secara massal
+     */
+    protected $fillable = [
+        'name',
+        'member_id',
+        'email',
+        'phone',
+        'address',
+        'password',
+        'is_active',
+        'is_login',
+        'avatar'
+    ];
+
+    /**
+     * Kolom yang harus disembunyikan
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    /**
+     * Casting tipe data
+     */
+    protected $casts = [
+        'is_active' => 'boolean',
+        'is_login' => 'boolean',
+        'otp_expires_at' => 'datetime',
+    ];
+
+    /**
+     * Aksesor untuk URL foto
+     */
     public function getPhotoUrlAttribute()
     {
-        return asset('storage/members/' . $this->avatar); // asumsi field 'photo' menyimpan nama file
+        return $this->avatar
+            ? asset('storage/members/' . $this->avatar)
+            : asset('storage/members/avatar.jpg'); // fallback ke avatar default
     }
-
 }
 
 

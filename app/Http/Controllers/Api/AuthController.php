@@ -105,17 +105,36 @@ class AuthController extends Controller
     {
         $user = $request->user();
 
-        // Hapus semua token
-        $user->tokens()->delete();
+        if (!$user) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'User not authenticated',
+            ], 401);
+        }
 
-        // Set is_login jadi false
-        $user->is_login = false;
-        $user->save();
+        \DB::beginTransaction();
+        try {
+            // Hapus semua token user
+            $user->tokens()->delete();
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Logged out successfully',
-        ]);
+            // Set is_login ke 0
+            $user->is_login = 0;
+            $user->save();
+
+            \DB::commit();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Logged out successfully',
+            ]);
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to logout',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     public function resetPassword(Request $request){
@@ -140,7 +159,6 @@ class AuthController extends Controller
                                 'acces_token' => $token
             ])
             : response()->json(['message' => __($status)], 400);
-
     }
 
 
@@ -164,6 +182,4 @@ class AuthController extends Controller
             ? response()->json(['message' => __($status)])
             : response()->json(['message' => __($status)], 400);
     }
-
-
 }
