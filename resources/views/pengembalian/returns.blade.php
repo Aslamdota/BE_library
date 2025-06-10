@@ -223,11 +223,21 @@
 
 <script>
 $(document).ready(function() {
-    // Check if required elements exist before initializing
     if (!$('meta[name="csrf-token"]').length) {
         console.error('CSRF token meta tag is missing');
         return;
     }
+
+    //update tanggal yang diminta pak win
+    const today = new Date();
+    $('#return_date')
+        .val(today.toISOString().split('T')[0])
+        .prop('readonly', true);
+
+    setInterval(function() {
+        const currentDate = new Date();
+        $('#return_date').val(currentDate.toISOString().split('T')[0]);
+    }, 1000);
 
     // Set CSRF token for all AJAX requests
     $.ajaxSetup({
