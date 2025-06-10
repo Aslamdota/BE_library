@@ -13,6 +13,7 @@ use App\Models\DueDateMaster;
 use App\Models\Member;
 use Illuminate\Support\Facades\DB;
 use App\Models\Book_missing;
+use App\Models\Finemaster;
 
 class LoanController extends Controller
 {
