@@ -332,15 +332,8 @@ class PeminjamanController extends Controller
             $now = Carbon::now();
 
             $fines = Loan::with(['member', 'book'])
-                ->where(function ($query) use ($now) {
-                    $query->whereNotNull('fine')->where('fine', '>', 0)
-                        ->orWhere(function ($q) use ($now) {
-                            $q->where('status', 'borrowed')->whereDate('due_date', '<', $now);
-                        })
-                        ->orWhere(function ($q) {
-                            $q->where('status', 'returned')->whereColumn('return_date', '>', 'due_date');
-                        });
-                })
+                ->where('status', 'overdue')
+                ->orWhere('fine', '!=', 0)
                 ->latest()
                 ->get();
 
@@ -350,7 +343,19 @@ class PeminjamanController extends Controller
                 ->addColumn('book_title', fn($row) => $row->book->title ?? '-')
                 ->addColumn('loan_date', fn($row) => Carbon::parse($row->loan_date)->translatedFormat('d M Y'))
                 ->addColumn('due_date', fn($row) => Carbon::parse($row->due_date)->translatedFormat('d M Y'))
-                ->addColumn('status', fn($row) => '<span class="badge bg-primary text-white">'.$row->status.'</span>')
+                ->addColumn('return_date', fn($row) => Carbon::parse($row->return_date)->translatedFormat('d M Y'))
+                ->addColumn('status', function($row) {
+                    $label = '-';
+                    if ($row->status === 'borrowed') {
+                        $label = 'Dipinjam';
+                    } elseif ($row->status === 'returned') {
+                        $label = 'Dikembalikan';
+                    } elseif ($row->status === 'overdue') {
+                        $label = 'Terlambat';
+                    }
+
+                    return '<span class="badge bg-primary text-white">'.$label.'</span>';
+                })
                 ->addColumn('fine', fn($row) => 'Rp'.number_format($row->fine ?? 0, 0, ',', '.'))
                 ->rawColumns(['status'])
                 ->make(true);

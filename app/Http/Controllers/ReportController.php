@@ -96,15 +96,8 @@ class ReportController extends Controller
             $now = Carbon::now()->translatedFormat('d F Y H:i:s');
 
             $fines = Loan::with(['member', 'book'])
-                ->where(function ($query) use ($now) {
-                    $query->whereNotNull('fine')->where('fine', '>', 0)
-                        ->orWhere(function ($q) use ($now) {
-                            $q->where('status', 'borrowed')->whereDate('due_date', '<', $now);
-                        })
-                        ->orWhere(function ($q) {
-                            $q->where('status', 'returned')->whereColumn('return_date', '>', 'due_date');
-                        });
-                })
+                ->where('status', 'overdue')
+                ->orWhere('fine', '!=', 0)
                 ->latest()
                 ->get();
 
@@ -141,17 +134,10 @@ class ReportController extends Controller
         $now = Carbon::now();
         
         $fines = Loan::with(['member', 'book', 'staff'])
-            ->where(function ($query) use ($now) {
-                $query->whereNotNull('fine')->where('fine', '>', 0)
-                    ->orWhere(function ($q) use ($now) {
-                        $q->where('status', 'borrowed')->whereDate('due_date', '<', $now);
-                    })
-                    ->orWhere(function ($q) {
-                        $q->where('status', 'returned')->whereColumn('return_date', '>', 'due_date');
-                    });
-            })
-            ->latest()
-            ->get();
+                ->where('status', 'overdue')
+                ->orWhere('fine', '!=', 0)
+                ->latest()
+                ->get();
 
         return view('reports.cetak-fine', compact('fines', 'now'));
     }

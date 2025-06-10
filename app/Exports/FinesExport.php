@@ -14,17 +14,10 @@ class FinesExport implements FromCollection, WithHeadings
         $now = Carbon::now();
 
         return Loan::with(['member', 'book'])
-            ->where(function ($query) use ($now) {
-                $query->whereNotNull('fine')->where('fine', '>', 0)
-                    ->orWhere(function ($q) use ($now) {
-                        $q->where('status', 'borrowed')->whereDate('due_date', '<', $now);
-                    })
-                    ->orWhere(function ($q) {
-                        $q->where('status', 'returned')->whereColumn('return_date', '>', 'due_date');
-                    });
-            })
-            ->latest()
-            ->get()
+            ->where('status', 'overdue')
+                ->orWhere('fine', '!=', 0)
+                ->latest()
+                ->get()
             ->map(function ($loan, $index) {
             return [
                 'No' => $index + 1,

@@ -41,14 +41,14 @@
                     </li>
 
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" data-bs-toggle="tab" href="#returnHistory" role="tab" aria-selected="false">
-                            <i class="bx bx-history me-1"></i> Riwayat
+                        <a class="nav-link" data-bs-toggle="tab" href="#fineHistory" role="tab" aria-selected="false">
+                            <i class="bx bx-history me-1"></i> Denda
                         </a>
                     </li>
 
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" data-bs-toggle="tab" href="#fineHistory" role="tab" aria-selected="false">
-                            <i class="bx bx-history me-1"></i> Denda
+                        <a class="nav-link" data-bs-toggle="tab" href="#returnHistory" role="tab" aria-selected="false">
+                            <i class="bx bx-history me-1"></i> Riwayat
                         </a>
                     </li>
 
@@ -95,6 +95,29 @@
                                         <th width="10%">Jatuh Tempo</th>
                                         <th width="10%">Status</th>
                                         <th width="10%">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Data will be loaded via AJAX -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="fineHistory" role="tabpanel">
+                        <div class="table-responsive">
+                            <table id="fine-table" class="table table-return table-hover" style="width:100%">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th width="5%">No</th>
+                                        <th width="10%">Member</th>
+                                        <th width="10%">Buku</th>
+                                        <th width="10%">Tanggal Peminjaman</th>
+                                        <th width="10%">Jatuh Tempo</th>
+                                        <th width="10%">Tanggal Dikembalikan</th>
+                                        <th width="10%">Status</th>
+                                        <th width="10%">Denda</th>
+
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -153,27 +176,7 @@
                         </div>
                     </div>
 
-                    <div class="tab-pane fade" id="fineHistory" role="tabpanel">
-                        <div class="table-responsive">
-                            <table id="fine-table" class="table table-return table-hover" style="width:100%">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th width="5%">No</th>
-                                        <th width="10%">Member</th>
-                                        <th>Buku</th>
-                                        <th width="10%">Tanggal Peminjaman</th>
-                                        <th width="10%">Jatuh Tempo</th>
-                                        <th width="10%">Status</th>
-                                        <th width="10%">Denda</th>
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Data will be loaded via AJAX -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    
 
                     <div class="tab-pane fade" id="bookMissing" role="tabpanel">
                         <div class="table-responsive">
@@ -794,7 +797,7 @@ $(document).ready(function() {
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating">
-                                <input type="date" class="form-control" id="return_date" name="return_date" placeholder="Tanggal Kembali" required>
+                                <input type="date" class="form-control" id="return_date" name="return_date" placeholder="Tanggal Kembali" required readonly>
                                 <label for="return_date">Tanggal Kembali</label>
                             </div>
                         </div>
@@ -1195,6 +1198,7 @@ $(document).ready(function () {
             { data: 'book_title', name: 'book_title' },
             { data: 'loan_date', name: 'loan_date' },
             { data: 'due_date', name: 'due_date' },
+            { data: 'return_date', name: 'return_date' },
             { data: 'status', name: 'status', orderable: false, searchable: false },
             { data: 'fine', name: 'fine' },
         ]
