@@ -45,7 +45,6 @@ class MembersController extends Controller
     }
 
     public function storeMember(Request $request){
-        // return $request;
         $request->validate([
             'name' => 'required|string|max:255',
             // 'member_id' => 'required|string|max:255|unique:members',
@@ -61,7 +60,9 @@ class MembersController extends Controller
             $avatar = $request->file('avatar')->store('members', 'public');
         }
 
-        $otpCode = rand(100000, 999999);
+        // OTP selalu 6 digit (misal: 003421)
+        $otpCode = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+
         $member = Member::create([
             'name' => $request->name,
             'member_id' => hexdec(uniqid()),
@@ -72,7 +73,7 @@ class MembersController extends Controller
             'avatar' => $avatar,
             'otp_code' => $otpCode,
             'is_active' => false,
-            'otp_expires_at' => now()->addMinutes(1)
+            'otp_expires_at' => now()->addMinutes(10)
         ]);
 
         // kirim email ke member
@@ -84,6 +85,68 @@ class MembersController extends Controller
         );
 
         return redirect()->route('view.member')->with($notif);
+    }
+
+    public function resendOtp($id)
+    {
+        $member = Member::findOrFail($id);
+
+        if ($member->is_active) {
+            return back()->with('info', 'Member sudah aktif. Tidak perlu OTP.');
+        }
+
+        // Cek apakah terakhir kali kirim OTP kurang dari 1 menit yang lalu
+        if ($member->otp_expires_at && $member->otp_expires_at > now()->subMinutes(1)) {
+            return back()->with([
+                'message' => 'OTP terlalu sering dikirim. Silakan tunggu 1 menit.',
+                'alert-type' => 'error'
+            ]);
+        }
+
+        // OTP selalu 6 digit
+        $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+
+        $member->update([
+            'otp_code' => $otp,
+            'otp_expires_at' => now()->addMinutes(10),
+        ]);
+
+        // Kirim ulang OTP
+        Mail::to($member->email)->send(new MemberOtpMail($member));
+
+        return redirect()->route('view.member')->with([
+            'message' => 'OTP berhasil dikirim ulang.',
+            'alert-type' => 'success'
+        ]);
+    }
+
+    public function sendOtp(Request $request){
+        $request->validate([
+            'otp' => 'required|numeric',
+            // 'member_id' => 'required|exists:members,id'
+        ]);
+
+        $member = Member::findOrFail($request->member_id);
+        if (
+            $member->otp_code === $request->otp &&
+            $member->otp_expires_at &&
+            $member->otp_expires_at >= now()
+        ) {
+            $member->update([
+                'is_active' => true,
+                'otp_code' => null,
+                'otp_expires_at' => null,
+            ]);
+            return back()->with([
+                'message' => 'Member berhasil diaktifkan',
+                'alert-type' => 'success',
+            ]);
+        }
+
+        return back()->with([
+            'message' => 'Kode OTP salah atau kadaluarsa.',
+            'alert-type' => 'error'
+        ]);
     }
 
     public function editMember($id){
@@ -133,7 +196,7 @@ class MembersController extends Controller
         $members = Member::findOrFail($id);
 
         if ($members->avatar) {
-            Storage::disk('public')->delete($members->avatar);    
+            Storage::disk('public')->delete($members->avatar);
         }
 
         $members->delete();
@@ -144,67 +207,6 @@ class MembersController extends Controller
 
         return redirect()->route('view.member')->with($notification);
     }
-
-    public function resendOtp($id)
-    {
-        $member = Member::findOrFail($id);
-
-        if ($member->is_active) {
-            return back()->with('info', 'Member sudah aktif. Tidak perlu OTP.');
-        }
-
-        // Cek apakah terakhir kali kirim OTP kurang dari 1 menit yang lalu
-        if ($member->otp_expires_at && $member->otp_expires_at > now()->subMinutes(1)) {
-            
-            return back()->with([
-                'message' => 'OTP terlalu sering dikirim. Silakan tunggu 1 menit.',
-                'alert-type' => 'error'
-            ]);
-        }
-
-        // Buat OTP baru dan perpanjang masa berlaku
-        $otp = rand(100000, 999999);
-        $member->update([
-            'otp_code' => $otp,
-            'otp_expires_at' => now()->addMinutes(10),
-        ]);
-
-        // Kirim ulang OTP
-        Mail::to($member->email)->send(new MemberOtpMail($member));
-
-        return redirect()->route('view.member')->with([
-            'message' => 'OTP berhasil dikirim ulang.',
-            'alert-type' => 'success'
-        ]);
-    }
-
-    public function sendOtp(Request $request){
-
-        $request->validate([
-            'otp' => 'required|numeric',
-            // 'member_id' => 'required|exists:members,id'
-        ]);
-
-        $member = Member::findOrFail($request->member_id);
-        if ($member->otp_code === $request->otp && $member->otp_expires_at >= now()) {
-        $member->update([
-            'is_active' => true,
-            'otp_code' => null,
-            'otp_expires_at' => null,
-        ]);
-        return back()->with([
-            'message' => 'Member berhasil diaktifkan',
-            'alert-type' => 'success',
-        ]);
-    }
-
-        return back()->with([
-            'message' => 'Kode OTP salah atau kadaluarsa.',
-            'alert-type' => 'error'
-        ]);
-    }
-
-
 
 
 }

@@ -98,6 +98,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/allFine', [LoanController::class, 'allFine']);
     Route::get('/fineByMember/{memberId}', [LoanController::class, 'fineByMember']);
 
-    
+
 
 });

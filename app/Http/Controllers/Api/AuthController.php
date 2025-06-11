@@ -97,44 +97,24 @@ class AuthController extends Controller
         ]);
     }
 
-    /**
-     * Proses logout pengguna.
-     */
-
+    //Proses logout pengguna
     public function logout(Request $request)
     {
         $user = $request->user();
 
-        if (!$user) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'User not authenticated',
-            ], 401);
-        }
+        // Hapus semua token
+        $user->tokens()->delete();
 
-        \DB::beginTransaction();
-        try {
-            // Hapus semua token user
-            $user->tokens()->delete();
-
-            // Set is_login ke 0
+        // Jika yang logout adalah Member, set is_login ke 0
+        if ($user instanceof \App\Models\Member) {
             $user->is_login = 0;
             $user->save();
-
-            \DB::commit();
-
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Logged out successfully',
-            ]);
-        } catch (\Exception $e) {
-            \DB::rollBack();
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Failed to logout',
-                'error' => $e->getMessage(),
-            ], 500);
         }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Logged out successfully',
+        ]);
     }
 
     public function resetPassword(Request $request){
@@ -159,6 +139,7 @@ class AuthController extends Controller
                                 'acces_token' => $token
             ])
             : response()->json(['message' => __($status)], 400);
+
     }
 
 
@@ -182,4 +163,6 @@ class AuthController extends Controller
             ? response()->json(['message' => __($status)])
             : response()->json(['message' => __($status)], 400);
     }
+
+
 }

@@ -26,7 +26,9 @@ class Member extends Authenticatable
         'password',
         'is_active',
         'is_login',
-        'avatar'
+        'avatar',
+        'otp_code',
+        'otp_expires_at',
     ];
 
     /**
@@ -54,6 +56,11 @@ class Member extends Authenticatable
         return $this->avatar
             ? asset('storage/members/' . $this->avatar)
             : asset('storage/members/avatar.jpg'); // fallback ke avatar default
+    }
+
+    public function getOtpCodeAttribute($value)
+    {
+        return $value;
     }
 }
 
