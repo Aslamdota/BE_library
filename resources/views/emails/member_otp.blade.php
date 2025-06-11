@@ -1,3 +1,4 @@
+{{-- filepath: resources/views/emails/member_otp.blade.php --}}
 <!DOCTYPE html>
 <html>
 <head>
