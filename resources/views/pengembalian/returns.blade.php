@@ -176,8 +176,6 @@
                         </div>
                     </div>
 
-                    
-
                     <div class="tab-pane fade" id="bookMissing" role="tabpanel">
                         <div class="table-responsive">
                             <table id="bookMissingTable" class="table table-return table-hover" style="width:100%">
@@ -186,8 +184,8 @@
                                         <th width="5%">No</th>
                                         <th width="10%">ISBN</th>
                                         <th width="10%">Title</th>
-                                        <th>Member</th>
-                                        <th>Tanggal Hilang</th>
+                                        <th width="10%">Member</th>
+                                        <th width="10%">Tanggal Hilang</th>
                                         <th width="10%">Status</th>
                                     </tr>
                                 </thead>

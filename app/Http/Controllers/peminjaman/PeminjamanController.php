@@ -318,9 +318,20 @@ class PeminjamanController extends Controller
             ->addColumn('date_of_los', function ($row) {
                 return \Carbon\Carbon::parse($row->date_of_los)->translatedFormat('d M Y'); // ganti sesuai field
             })
-            ->addColumn('status', function ($row) {
-                return '<span class="badge bg-gradient-blooker text-white shadow-sm w-10">'.$row->status.'</span>'; // sesuaikan dengan kebutuhan
-            })
+            ->addColumn('status', function($row) {
+                    $label = '-';
+                    if ($row->status === 'borrowed') {
+                        $label = 'Dipinjam';
+                    } elseif ($row->status === 'returned') {
+                        $label = 'Dikembalikan';
+                    } elseif ($row->status === 'overdue') {
+                        $label = 'Terlambat';
+                    } elseif ($row->status === 'missing'){
+                        $label = 'Hilang';
+                    }
+
+                    return '<span class="badge bg-danger text-white">'.$label.'</span>';
+                })
             ->rawColumns(['status', 'isbn'])
             ->make(true);
             }
@@ -354,7 +365,7 @@ class PeminjamanController extends Controller
                         $label = 'Terlambat';
                     }
 
-                    return '<span class="badge bg-primary text-white">'.$label.'</span>';
+                    return '<span class="badge bg-gradient-blooker text-white">'.$label.'</span>';
                 })
                 ->addColumn('fine', fn($row) => 'Rp'.number_format($row->fine ?? 0, 0, ',', '.'))
                 ->rawColumns(['status'])
