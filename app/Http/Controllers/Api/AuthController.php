@@ -97,7 +97,10 @@ class AuthController extends Controller
         ]);
     }
 
-    //Proses logout pengguna
+    /**
+     * Proses logout pengguna.
+     */
+
     public function logout(Request $request)
     {
         $user = $request->user();
@@ -105,11 +108,9 @@ class AuthController extends Controller
         // Hapus semua token
         $user->tokens()->delete();
 
-        // Jika yang logout adalah Member, set is_login ke 0
-        if ($user instanceof \App\Models\Member) {
-            $user->is_login = 0;
-            $user->save();
-        }
+        // Set is_login jadi false
+        $user->is_login = false;
+        $user->save();
 
         return response()->json([
             'status' => 'success',

@@ -18,7 +18,7 @@ class MemberSeeder extends Seeder
             'member_id'  => 'MB09812',
             'email'      => 'jane@example.com',
             'phone'      => '081234567890',
-            'password'   => Hash::make('password123'), // Menggunakan Hash::make
+            'password'   => Hash::make('password123'),
             'is_active' => true,
             'created_at' => now(),
             'updated_at' => now(),

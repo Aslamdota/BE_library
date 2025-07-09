@@ -43,7 +43,7 @@ class ProfilController extends Controller
         $users->save();
 
         $notif = array(
-            'message' => 'User berhasil diupdate',
+            'message' => 'Profil berhasil diupdate',
             'alert-type' => 'info'
         );
 

@@ -67,7 +67,7 @@ class MembersController extends Controller
             'name' => $request->name,
             'member_id' => hexdec(uniqid()),
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password' => Hash::make($request->Password),
             'phone' => $request->phone,
             'address' => $request->address,
             'avatar' => $avatar,

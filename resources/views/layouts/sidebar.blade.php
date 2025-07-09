@@ -59,7 +59,7 @@
             <a href="{{ route('view.user') }}">
                 <div class="parent-icon"><i class='bx bx-user-circle'></i>
                 </div>
-                <div class="menu-title">User</div>
+                <div class="menu-title">Admin</div>
             </a>
         </li>
 
